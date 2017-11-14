@@ -18,7 +18,7 @@ export default PageTemplate;
 
 export const pageQuery = graphql`
   query currentPageQuery($slug: String!) {
-    wordpressPage(slug: { eq: $slug }) {
+    wordpressWpCases(slug: { eq: $slug }) {
       title
       content
     }

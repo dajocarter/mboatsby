@@ -9,7 +9,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
     resolve(
       graphql(`
         {
-          allWordpressPage {
+          allWordpressWpCases {
             edges {
               node {
                 id
@@ -27,7 +27,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
           reject(result.errors);
         }
 
-        result.data.allWordpressPage.edges.forEach(({ node }) => {
+        result.data.allWordpressWpCases.edges.forEach(({ node }) => {
           const slug = node.slug;
           if (node.status === `publish`) {
             createPage({
