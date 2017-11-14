@@ -5,23 +5,11 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
 
   return new Promise((resolve, reject) => {
     const pageTemplate = path.resolve(`src/templates/page.js`);
-    const postTemplate = path.resolve(`src/templates/single-post.js`);
 
     resolve(
       graphql(`
         {
           allWordpressPage {
-            edges {
-              node {
-                id
-                wordpress_id
-                slug
-                status
-                template
-              }
-            }
-          }
-          allWordpressPost {
             edges {
               node {
                 id
@@ -45,18 +33,6 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
             createPage({
               path: node.slug,
               component: pageTemplate,
-              context: {
-                slug: node.slug
-              }
-            });
-          }
-        });
-
-        result.data.allWordpressPost.edges.forEach(({ node }) => {
-          if (node.status === `publish`) {
-            createPage({
-              path: node.slug,
-              component: postTemplate,
               context: {
                 slug: node.slug
               }
