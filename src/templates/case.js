@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-class PageTemplate extends Component {
+class CaseTemplate extends Component {
   render() {
-    const page = this.props.data.wordpressPage;
+    const page = this.props.data.wordpressWpCases;
 
     return (
       <div>
@@ -14,11 +14,11 @@ class PageTemplate extends Component {
   }
 }
 
-export default PageTemplate;
+export default CaseTemplate;
 
-export const pageQuery = graphql`
-  query currentPageQuery($slug: String!) {
-    wordpressPage(slug: { eq: $slug }) {
+export const caseQuery = graphql`
+  query currentCaseQuery($slug: String!) {
+    wordpressWpCases(slug: { eq: $slug }) {
       title
       content
     }
