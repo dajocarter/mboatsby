@@ -9,7 +9,8 @@
     "gatsby-link": "^1.6.37",
     "gatsby-plugin-react-helmet": "^2.0.5",
     "gatsby-plugin-sass": "^1.0.17",
-    "gatsby-source-wordpress": "^2.0.61"
+    "gatsby-source-wordpress": "^2.0.61",
+    "reactstrap": "next"
   },
   "keywords": [
     "gatsby"
