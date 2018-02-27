@@ -26,11 +26,8 @@ const Header = props => (
           <li key={item.wordpress_id} className={`nav-item`}>
             <Link
               to={`/${item.object_slug}`}
-              className={
-                location.pathname === `/${item.object_slug}`
-                  ? `nav-link active`
-                  : `nav-link`
-              }
+              className={`nav-link`}
+              activeClassName={`active`}
             >
               {item.title}
             </Link>
