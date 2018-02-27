@@ -28,9 +28,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
                 wordpress_id
                 slug
                 status
-                acf {
-                  parent_slug
-                }
+                
               }
             }
           }
@@ -58,9 +56,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
           const slug = node.slug;
           if (node.status === `publish`) {
             createPage({
-              path: node.acf.parent_slug
-                ? `${node.acf.parent_slug}/${node.slug}`
-                : `${node.slug}`,
+              path: node.slug,
               component: caseTemplate,
               context: {
                 slug: node.slug
