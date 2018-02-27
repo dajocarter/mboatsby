@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import CheckYourAnswer from "../components/layouts/CheckYourAnswer";
 import Checkboxes from "../components/layouts/Checkboxes";
 import Content from "../components/layouts/Content";
+import Image from "../components/layouts/Image";
 import Links from "../components/layouts/Links";
 
 class CaseTemplate extends Component {
@@ -19,6 +20,7 @@ class CaseTemplate extends Component {
                 return (
                   <CheckYourAnswer
                     key={`layout-${index}-${acf_type.__typename}`}
+                    layoutIndex={index}
                     acf={acf_type}
                   />
                 );
@@ -27,6 +29,7 @@ class CaseTemplate extends Component {
                 return (
                   <Checkboxes
                     key={`layout-${index}-${acf_type.__typename}`}
+                    layoutIndex={index}
                     acf={acf_type}
                   />
                 );
@@ -35,6 +38,16 @@ class CaseTemplate extends Component {
                 return (
                   <Content
                     key={`layout-${index}-${acf_type.__typename}`}
+                    layoutIndex={index}
+                    acf={acf_type}
+                  />
+                );
+                break;
+              case "WordPressAcf_image":
+                return (
+                  <Image
+                    key={`layout-${index}-${acf_type.__typename}`}
+                    layoutIndex={index}
                     acf={acf_type}
                   />
                 );
@@ -43,6 +56,7 @@ class CaseTemplate extends Component {
                 return (
                   <Links
                     key={`layout-${index}-${acf_type.__typename}`}
+                    layoutIndex={index}
                     acf={acf_type}
                   />
                 );
@@ -64,19 +78,17 @@ export const caseQuery = graphql`
         layouts_case {
           __typename
           ... on WordPressAcf_checkboxes {
-            question
-            checkboxes_or_radio_buttons
+            input_type
             options {
-              option
+              text
               is_correct
             }
           }
           ... on WordPressAcf_check_your_answer {
-            context
             inputs {
               label
               answers {
-                answer
+                possibility
               }
               hint
             }
@@ -84,8 +96,18 @@ export const caseQuery = graphql`
           ... on WordPressAcf_content {
             content
           }
+          ... on WordPressAcf_image {
+            image {
+              localFile {
+                childImageSharp {
+                  sizes(maxWidth: 800) {
+                    ...GatsbyImageSharpSizes_tracedSVG
+                  }
+                }
+              }
+            }
+          }
           ... on WordPressAcf_links {
-            context
             links {
               page {
                 post_name

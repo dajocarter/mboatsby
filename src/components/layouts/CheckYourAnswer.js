@@ -3,12 +3,23 @@ import PropTypes from "prop-types";
 
 export default class CheckYourAnswer extends Component {
   render() {
-    return <div className="wp-content" dangerouslySetInnerHTML={{ __html: this.props.acf.context }} />;
+    return (
+      <section className={`layout-${this.props.layoutIndex}`}>
+        {this.props.acf.inputs &&
+          this.props.acf.inputs.map((input, index) => (
+            <div className="form-group">
+              <label htmlFor={`input-${this.props.layoutIndex}-${index}`}>
+                <strong>{input.label}</strong>
+              </label>
+              <input
+                type="text"
+                id={`input-${this.props.layoutIndex}-${index}`}
+              />
+            </div>
+          ))}
+      </section>
+    );
   }
 }
 
-CheckYourAnswer.propTypes = {
-  acf: PropTypes.shape({
-    context: PropTypes.string
-  })
-};
+CheckYourAnswer.propTypes = {};
