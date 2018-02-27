@@ -16,8 +16,7 @@ module.exports = {
         baseUrl: `mboa.tribestaging.com`,
         protocol: `https`,
         hostingWPCOM: false,
-        useACF: true,
-        verboseOutput: true
+        useACF: true
       }
     }
   ]
