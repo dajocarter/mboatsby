@@ -72,7 +72,7 @@ export const indexQuery = graphql`
         title
       }
     }
-    wordpressWpApiMenusMenusItems(wordpress_id: { eq: 4 }) {
+    wordpressWpApiMenusMenusItems(wordpress_id: { eq: 5 }) {
       items {
         wordpress_id
         title
