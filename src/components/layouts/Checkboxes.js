@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 export default class Checkboxes extends Component {
   render() {
     return (
-      <div dangerouslySetInnerHTML={{ __html: this.props.acf.question }} />
+      <div className="wp-content" dangerouslySetInnerHTML={{ __html: this.props.acf.question }} />
     );
   }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes, { string } from "prop-types";
 
 const Content = ({ acf }) => {
-  return <div dangerouslySetInnerHTML={{ __html: acf.content }} />;
+  return <div className="wp-content" dangerouslySetInnerHTML={{ __html: acf.content }} />;
 };
 
 export default Content;

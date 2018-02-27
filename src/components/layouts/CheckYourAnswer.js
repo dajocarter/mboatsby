@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 export default class CheckYourAnswer extends Component {
   render() {
-    return <div dangerouslySetInnerHTML={{ __html: this.props.acf.context }} />;
+    return <div className="wp-content" dangerouslySetInnerHTML={{ __html: this.props.acf.context }} />;
   }
 }
 
