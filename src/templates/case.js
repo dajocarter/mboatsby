@@ -12,42 +12,43 @@ class CaseTemplate extends Component {
     return (
       <div>
         <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
-        {page.acf.layouts_case.map((acf_type, index) => {
-          switch (acf_type.__typename) {
-            case "WordPressAcf_check_your_answer":
-              return (
-                <CheckYourAnswer
-                  key={`layout-${index}-${acf_type.__typename}`}
-                  acf={acf_type}
-                />
-              );
-              break;
-            case "WordPressAcf_checkboxes":
-              return (
-                <Checkboxes
-                  key={`layout-${index}-${acf_type.__typename}`}
-                  acf={acf_type}
-                />
-              );
-              break;
-            case "WordPressAcf_content":
-              return (
-                <Content
-                  key={`layout-${index}-${acf_type.__typename}`}
-                  acf={acf_type}
-                />
-              );
-              break;
-            case "WordPressAcf_links":
-              return (
-                <Links
-                  key={`layout-${index}-${acf_type.__typename}`}
-                  acf={acf_type}
-                />
-              );
-              break;
-          }
-        })}
+        {page.acf.layouts_case &&
+          page.acf.layouts_case.map((acf_type, index) => {
+            switch (acf_type.__typename) {
+              case "WordPressAcf_check_your_answer":
+                return (
+                  <CheckYourAnswer
+                    key={`layout-${index}-${acf_type.__typename}`}
+                    acf={acf_type}
+                  />
+                );
+                break;
+              case "WordPressAcf_checkboxes":
+                return (
+                  <Checkboxes
+                    key={`layout-${index}-${acf_type.__typename}`}
+                    acf={acf_type}
+                  />
+                );
+                break;
+              case "WordPressAcf_content":
+                return (
+                  <Content
+                    key={`layout-${index}-${acf_type.__typename}`}
+                    acf={acf_type}
+                  />
+                );
+                break;
+              case "WordPressAcf_links":
+                return (
+                  <Links
+                    key={`layout-${index}-${acf_type.__typename}`}
+                    acf={acf_type}
+                  />
+                );
+                break;
+            }
+          })}
       </div>
     );
   }
