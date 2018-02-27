@@ -12,7 +12,7 @@ class CaseTemplate extends Component {
     return (
       <div>
         <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
-        {page.acf.layouts_cases.map((acf_type, index) => {
+        {page.acf.layouts_case.map((acf_type, index) => {
           switch (acf_type.__typename) {
             case "WordPressAcf_check_your_answer":
               return (
@@ -60,18 +60,25 @@ export const caseQuery = graphql`
     wordpressWpCases(slug: { eq: $slug }) {
       title
       acf {
-        layouts_cases {
+        layouts_case {
           __typename
           ... on WordPressAcf_checkboxes {
             question
             checkboxes_or_radio_buttons
-            choices {
-              choice
+            options {
+              option
               is_correct
             }
           }
           ... on WordPressAcf_check_your_answer {
             context
+            inputs {
+              label
+              answers {
+                answer
+              }
+              hint
+            }
           }
           ... on WordPressAcf_content {
             content
@@ -79,7 +86,10 @@ export const caseQuery = graphql`
           ... on WordPressAcf_links {
             context
             links {
-              button_text
+              page {
+                post_name
+              }
+              text
             }
           }
         }
