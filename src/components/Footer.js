@@ -9,7 +9,6 @@ const SiteFooter = styled.footer`
   bottom: 0;
   color: #777;
   height: 330px;
-  margin-top: 20px;
   position: absolute;
   width: 100%;
   @media (min-width: 768px) {
