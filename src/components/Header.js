@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Link from "gatsby-link";
 
 const Header = props => (
@@ -36,3 +37,14 @@ const Header = props => (
 );
 
 export default Header;
+
+Header.propTypes = {
+  title: PropTypes.string.isRequired,
+  menu: PropTypes.arrayOf(
+    PropTypes.shape({
+      object_slug: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      wordpress_id: PropTypes.number.isRequired
+    })
+  )
+};
