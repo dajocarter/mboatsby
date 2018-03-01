@@ -21,7 +21,7 @@ const TemplateWrapper = ({ data, children }) => (
       title={data.site.siteMetadata.title}
       menu={data.wordpressWpApiMenusMenusItems.items}
     />
-    <main className="container">{children()}</main>
+    <main>{children()}</main>
     <Footer siteMetadata={data.site.siteMetadata} />
   </div>
 );
