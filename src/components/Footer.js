@@ -21,7 +21,11 @@ const FooterContainer = styled(Grid)`
   max-width: 100%;
 `;
 
-const FooterSiteTitle = styled.h2``;
+const FooterSiteTitle = styled.h2`
+  && {
+    padding-left: 0;
+  }
+`;
 
 const AuthorContactList = styled.ul`
   list-style: none;
@@ -40,11 +44,13 @@ const Footer = props => (
   <SiteFooter>
     <FooterContainer>
       <Row>
-        <NavbarBrand>
-          <FooterSiteTitle>
-            <Link to={`/`}>{props.siteMetadata.title}</Link>
-          </FooterSiteTitle>
-        </NavbarBrand>
+        <Col xs={12}>
+          <NavbarBrand>
+            <FooterSiteTitle>
+              <Link to={`/`}>{props.siteMetadata.title}</Link>
+            </FooterSiteTitle>
+          </NavbarBrand>
+        </Col>
       </Row>
       <Row>
         <Col xs={12} sm={4}>
