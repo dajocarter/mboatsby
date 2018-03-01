@@ -74,3 +74,14 @@ const Footer = props => (
 );
 
 export default Footer;
+
+Footer.propTypes = {
+  siteMetadata: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    author: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired
+    })
+  })
+};
