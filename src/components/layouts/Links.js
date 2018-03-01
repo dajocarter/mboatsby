@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes, { number } from "prop-types";
 import Link from "gatsby-link";
+import { Row } from "react-bootstrap";
 
 const Links = ({ acf, layoutIndex }) => {
   return (
-    <section className={`layout-${layoutIndex}`}>
+    <Row id={`layout-${layoutIndex}`}>
       {acf.links &&
         acf.links.map((button, index) => (
           <Link
@@ -15,7 +16,7 @@ const Links = ({ acf, layoutIndex }) => {
             {button.text}
           </Link>
         ))}
-    </section>
+    </Row>
   );
 };
 

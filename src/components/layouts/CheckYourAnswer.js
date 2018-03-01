@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Row } from "react-bootstrap";
 
 export default class CheckYourAnswer extends Component {
   render() {
     return (
-      <section className={`layout-${this.props.layoutIndex}`}>
+      <Row id={`layout-${this.props.layoutIndex}`}>
         {this.props.acf.inputs &&
           this.props.acf.inputs.map((input, index) => (
             <div key={index} className="form-group">
@@ -17,7 +18,7 @@ export default class CheckYourAnswer extends Component {
               />
             </div>
           ))}
-      </section>
+      </Row>
     );
   }
 }
