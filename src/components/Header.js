@@ -1,39 +1,53 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Link from "gatsby-link";
+import styled from "styled-components";
+import {
+  Navbar,
+  NavbarHeader,
+  NavbarBrand,
+  NavbarToggle,
+  NavbarCollapse,
+  Nav,
+  NavDropdown,
+  MenuItem
+} from "react-bootstrap";
+
+const SiteHeader = styled(Navbar)`
+  && {
+    border-radius: 0;
+  }
+`;
+
+const NavItem = styled.li``;
 
 const Header = props => (
-  <nav className={`navbar navbar-expand-sm navbar-dark bg-dark`}>
-    <Link to={`/`} className={`navbar-brand`}>
-      {props.title}
-    </Link>
-    <button
-      className={`navbar-toggler`}
-      type={`button`}
-      data-toggle={`collapse`}
-      data-target={`#navbarNav`}
-      aria-controls={`navbarNav`}
-      aria-expanded={`false`}
-      aria-label={`Toggle navigation`}
-    >
-      <span className={`navbar-toggler-icon`} />
-    </button>
-    <div className={`collapse navbar-collapse`} id={`navbarNav`}>
-      <ul className={`navbar-nav`}>
-        {props.menu.map(item => (
-          <li key={item.wordpress_id} className={`nav-item`}>
-            <Link
-              to={`/${item.object_slug}`}
-              className={`nav-link`}
-              activeClassName={`active`}
-            >
-              {item.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </nav>
+  <SiteHeader inverse collapseOnSelect>
+    <Navbar.Header>
+      <Navbar.Brand>
+        <Link to={`/`}>{props.title}</Link>
+      </Navbar.Brand>
+      <Navbar.Toggle />
+    </Navbar.Header>
+    <Navbar.Collapse>
+      <Nav pullRight>
+        <NavDropdown eventKey={1} title="Cases" id="menu-dropdown">
+          {props.menu.map((item, index) => (
+            <NavItem key={item.wordpress_id} role={`presentation`}>
+              <Link
+                to={`/${item.object_slug}`}
+                activeClassName={`active`}
+                role={`menuitem`}
+                tabIndex={-1}
+              >
+                {item.title}
+              </Link>
+            </NavItem>
+          ))}
+        </NavDropdown>
+      </Nav>
+    </Navbar.Collapse>
+  </SiteHeader>
 );
 
 export default Header;
