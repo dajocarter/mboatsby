@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
-    "bootstrap": "4.0.0",
+    "bootstrap": "3",
     "gatsby": "^1.9.215",
     "gatsby-image": "^1.0.39",
     "gatsby-link": "^1.6.37",
@@ -14,8 +14,8 @@
     "gatsby-plugin-styled-components": "^2.0.9",
     "gatsby-source-wordpress": "^2.0.61",
     "gatsby-transformer-sharp": "^1.6.21",
+    "react-bootstrap": "^0.32.1",
     "react-helmet": "^5.2.0",
-    "reactstrap": "next",
     "styled-components": "^3.1.6"
   },
   "keywords": [
