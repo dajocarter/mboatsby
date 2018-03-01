@@ -2,6 +2,7 @@ html {
   position: relative;
   min-height: 100%;
 }
+
 body {
   font-size: 16px;
   padding-top: 52px;
@@ -10,10 +11,9 @@ body {
     margin-bottom: 290px;
   }
 }
-@media (min-width: 576px) {
-  .navbar-expand-sm .navbar-collapse {
-    justify-content: flex-end;
-  }
+
+div[id^="layout-"] {
+  margin-bottom: 2rem;
 }
 
 .wp-content {
