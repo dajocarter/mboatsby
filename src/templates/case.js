@@ -5,13 +5,14 @@ import Checkboxes from "../components/layouts/Checkboxes";
 import Content from "../components/layouts/Content";
 import Image from "../components/layouts/Image";
 import Links from "../components/layouts/Links";
+import { Grid } from "react-bootstrap";
 
 class CaseTemplate extends Component {
   render() {
     const page = this.props.data.wordpressWpCases;
 
     return (
-      <div>
+      <Grid>
         <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
         {page.acf.layouts_case &&
           page.acf.layouts_case.map((acf_type, index) => {
@@ -63,7 +64,7 @@ class CaseTemplate extends Component {
                 break;
             }
           })}
-      </div>
+      </Grid>
     );
   }
 }
