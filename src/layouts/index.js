@@ -74,7 +74,7 @@ const Footer = props => (
 const TemplateWrapper = ({ data, children }) => (
   <div>
     <Helmet
-      title="Gatsby Default Starter"
+      title={data.site.siteMetadata.title}
       meta={[
         { name: "description", content: "Sample" },
         { name: "keywords", content: "sample, something" }
