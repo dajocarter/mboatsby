@@ -13,7 +13,13 @@ const SiteHeader = styled(Navbar)`
 const NavItem = styled.li``;
 
 const Header = props => (
-  <SiteHeader inverse collapseOnSelect>
+  <SiteHeader
+    inverse
+    fixedTop
+    collapseOnSelect
+    componentClass={`header`}
+    role={`banner`}
+  >
     <Navbar.Header>
       <Navbar.Brand>
         <Link to={`/`}>{props.title}</Link>
@@ -21,7 +27,7 @@ const Header = props => (
       <Navbar.Toggle />
     </Navbar.Header>
     <Navbar.Collapse>
-      <Nav pullRight>
+      <Nav pullRight role={`navigation`}>
         <NavDropdown eventKey={1} title="Cases" id="menu-dropdown">
           {props.menu.map((item, index) => (
             <NavItem key={item.wordpress_id} role={`presentation`}>
