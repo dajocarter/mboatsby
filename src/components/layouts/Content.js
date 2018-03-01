@@ -1,18 +1,18 @@
 import React from "react";
 import PropTypes, { string, number } from "prop-types";
+import { Row, Col } from "react-bootstrap";
 
-const Content = ({ acf, layoutIndex }) => {
-  return (
-    <section className={`layout-${layoutIndex}`}>
-      {acf.content && (
-        <div
-          className="wp-content"
-          dangerouslySetInnerHTML={{ __html: acf.content }}
-        />
-      )}
-    </section>
-  );
-};
+const Content = ({ acf, layoutIndex }) => (
+  <Row id={`layout-${layoutIndex}`}>
+    {acf.content && (
+      <Col
+        xs={12}
+        className="wp-content"
+        dangerouslySetInnerHTML={{ __html: acf.content }}
+      />
+    )}
+  </Row>
+);
 
 export default Content;
 
