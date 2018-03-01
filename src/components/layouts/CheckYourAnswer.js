@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Row } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
+import { columnClasses } from "../../utils/helpers";
+import InputForm from "../InputForm";
 
 export default class CheckYourAnswer extends Component {
   render() {
@@ -8,15 +10,16 @@ export default class CheckYourAnswer extends Component {
       <Row id={`layout-${this.props.layoutIndex}`}>
         {this.props.acf.inputs &&
           this.props.acf.inputs.map((input, index) => (
-            <div key={index} className="form-group">
-              <label htmlFor={`input-${this.props.layoutIndex}-${index}`}>
-                <strong>{input.label}</strong>
-              </label>
-              <input
-                type="text"
-                id={`input-${this.props.layoutIndex}-${index}`}
+            <Col
+              key={index}
+              sm={columnClasses(index, this.props.acf.inputs.length)}
+            >
+              <InputForm
+                input={input}
+                inputIndex={index}
+                layoutIndex={this.props.layoutIndex}
               />
-            </div>
+            </Col>
           ))}
       </Row>
     );
