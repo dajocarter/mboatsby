@@ -23,10 +23,10 @@ const CaseTemplate = props => (
   <Grid>
     {props.data.tags.edges
       .filter(({ node }) => node.wordpress_id === props.data.case.tags[0])
-      .map(({ node }) => <SiteTitle>{node.name}</SiteTitle>)}
+      .map(({ node }, index) => <SiteTitle key={index}>{node.name}</SiteTitle>)}
     {props.data.categories.edges
       .filter(({ node }) => node.wordpress_id === props.data.case.categories[0])
-      .map(({ node }) => <CaseTitle>{node.name}</CaseTitle>)}
+      .map(({ node }, index) => <CaseTitle key={index}>{node.name}</CaseTitle>)}
     {props.data.case.acf.layouts_case &&
       props.data.case.acf.layouts_case.map((acf_type, index) => {
         switch (acf_type.__typename) {
