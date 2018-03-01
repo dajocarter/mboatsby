@@ -9,7 +9,12 @@ import { Grid } from "react-bootstrap";
 
 const CaseTemplate = props => (
   <Grid>
-    <h1>{props.data.case.title}</h1>
+    {props.data.tags.edges
+      .filter(({ node }) => node.wordpress_id === props.data.case.tags[0])
+      .map(({ node }) => <h1>{node.name}</h1>)}
+    {props.data.categories.edges
+      .filter(({ node }) => node.wordpress_id === props.data.case.categories[0])
+      .map(({ node }) => <h2>{node.name}</h2>)}
     {props.data.case.acf.layouts_case &&
       props.data.case.acf.layouts_case.map((acf_type, index) => {
         switch (acf_type.__typename) {
@@ -69,6 +74,8 @@ export const caseQuery = graphql`
   query currentCaseQuery($slug: String!) {
     case: wordpressWpCases(slug: { eq: $slug }) {
       title
+      categories
+      tags
       acf {
         layouts_case {
           __typename
@@ -113,9 +120,20 @@ export const caseQuery = graphql`
         }
       }
     }
-    site {
-      siteMetadata {
-        title
+    categories: allWordpressCategory {
+      edges {
+        node {
+          name
+          wordpress_id
+        }
+      }
+    }
+    tags: allWordpressTag {
+      edges {
+        node {
+          name
+          wordpress_id
+        }
       }
     }
   }
