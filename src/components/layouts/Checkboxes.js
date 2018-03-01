@@ -7,7 +7,7 @@ export default class Checkboxes extends Component {
       <section className={`layout-${this.props.layoutIndex}`}>
         {this.props.acf.options &&
           this.props.acf.options.map((option, index) => (
-            <label htmlFor={`option-${index}`}>
+            <label key={index} htmlFor={`option-${index}`}>
               <input
                 type={this.props.acf.input_type}
                 id={`option-${index}`}

@@ -7,7 +7,7 @@ export default class CheckYourAnswer extends Component {
       <section className={`layout-${this.props.layoutIndex}`}>
         {this.props.acf.inputs &&
           this.props.acf.inputs.map((input, index) => (
-            <div className="form-group">
+            <div key={index} className="form-group">
               <label htmlFor={`input-${this.props.layoutIndex}-${index}`}>
                 <strong>{input.label}</strong>
               </label>
