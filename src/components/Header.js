@@ -2,16 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Link from "gatsby-link";
 import styled from "styled-components";
-import {
-  Navbar,
-  NavbarHeader,
-  NavbarBrand,
-  NavbarToggle,
-  NavbarCollapse,
-  Nav,
-  NavDropdown,
-  MenuItem
-} from "react-bootstrap";
+import { Navbar, Nav, NavDropdown, MenuItem } from "react-bootstrap";
 
 const SiteHeader = styled(Navbar)`
   && {
