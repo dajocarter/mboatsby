@@ -39,7 +39,7 @@ const CaseTemplate = props => (
               />
             );
             break;
-          case "WordPressAcf_checkboxes":
+          case "WordPressAcf_input_group":
             return (
               <InputGroup
                 key={`layout-${index}-${acf_type.__typename}`}
@@ -91,7 +91,7 @@ export const caseQuery = graphql`
       acf {
         layouts_case {
           __typename
-          ... on WordPressAcf_checkboxes {
+          ... on WordPressAcf_input_group {
             input_type
             options {
               text
