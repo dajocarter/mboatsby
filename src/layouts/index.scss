@@ -16,6 +16,16 @@ div[id^="layout-"] {
   margin-bottom: 2rem;
 }
 
+.WordPressAcf_links {
+  div[class^="col-"] {
+    &:not(:last-child) {
+      @media (max-width: 767px) {
+        margin-bottom: 2rem;
+      }
+    }
+  }
+}
+
 .wp-content {
   img {
     display: block;
