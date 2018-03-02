@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CheckYourAnswer from "../components/layouts/CheckYourAnswer";
-import Checkboxes from "../components/layouts/Checkboxes";
+import InputGroup from "../components/layouts/InputGroup";
 import Content from "../components/layouts/Content";
 import Image from "../components/layouts/Image";
 import Links from "../components/layouts/Links";
@@ -41,7 +41,7 @@ const CaseTemplate = props => (
             break;
           case "WordPressAcf_checkboxes":
             return (
-              <Checkboxes
+              <InputGroup
                 key={`layout-${index}-${acf_type.__typename}`}
                 layoutIndex={index}
                 acf={acf_type}
