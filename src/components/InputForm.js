@@ -5,18 +5,22 @@ import {
   ControlLabel,
   InputGroup,
   FormControl,
-  Glyphicon
+  Glyphicon,
+  Overlay,
+  Popover
 } from "react-bootstrap";
 
 export default class InputForm extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       value: ``,
       validation: null,
-      glyphicon: props.input.hint ? `question-sign` : ``
+      glyphicon: props.input.hint ? `question-sign` : ``,
+      show: false
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange(event) {
@@ -37,6 +41,10 @@ export default class InputForm extends Component {
     });
   }
 
+  handleClick(event) {
+    this.setState({ target: event.target, show: !this.state.show });
+  }
+
   render() {
     return (
       <FormGroup validationState={this.state.validation}>
@@ -53,9 +61,30 @@ export default class InputForm extends Component {
             onChange={this.handleChange}
           />
           <InputGroup.Addon>
-            <Glyphicon glyph={this.state.glyphicon} />
+            <Glyphicon
+              glyph={this.state.glyphicon}
+              onClick={this.props.input.hint ? this.handleClick : null}
+            />
           </InputGroup.Addon>
         </InputGroup>
+        {this.props.input.hint && (
+          <Overlay
+            show={this.state.show}
+            target={this.state.target}
+            placement={`top`}
+            container={this}
+            containerPadding={0}
+          >
+            <Popover
+              id={`hint-${this.props.layoutIndex}-${this.props.inputIndex}`}
+              title={`Hint for ${this.props.input.label}`}
+            >
+              <div
+                dangerouslySetInnerHTML={{ __html: this.props.input.hint }}
+              />
+            </Popover>
+          </Overlay>
+        )}
       </FormGroup>
     );
   }
