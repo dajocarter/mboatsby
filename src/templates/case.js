@@ -34,6 +34,7 @@ const CaseTemplate = props => (
             return (
               <CheckYourAnswer
                 key={`layout-${index}-${acf_type.__typename}`}
+                layoutName={acf_type.__typename}
                 layoutIndex={index}
                 acf={acf_type}
               />
@@ -43,6 +44,7 @@ const CaseTemplate = props => (
             return (
               <InputGroup
                 key={`layout-${index}-${acf_type.__typename}`}
+                layoutName={acf_type.__typename}
                 layoutIndex={index}
                 acf={acf_type}
               />
@@ -52,6 +54,7 @@ const CaseTemplate = props => (
             return (
               <Content
                 key={`layout-${index}-${acf_type.__typename}`}
+                layoutName={acf_type.__typename}
                 layoutIndex={index}
                 acf={acf_type}
               />
@@ -61,6 +64,7 @@ const CaseTemplate = props => (
             return (
               <Image
                 key={`layout-${index}-${acf_type.__typename}`}
+                layoutName={acf_type.__typename}
                 layoutIndex={index}
                 acf={acf_type}
               />
@@ -70,6 +74,7 @@ const CaseTemplate = props => (
             return (
               <Links
                 key={`layout-${index}-${acf_type.__typename}`}
+                layoutName={acf_type.__typename}
                 layoutIndex={index}
                 acf={acf_type}
               />

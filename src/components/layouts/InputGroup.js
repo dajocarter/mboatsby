@@ -5,7 +5,7 @@ import InputCheckbox from "../InputCheckbox";
 import InputRadio from "../InputRadio";
 
 const InputGroup = props => (
-  <Row id={`layout-${props.layoutIndex}`}>
+  <Row id={`layout-${props.layoutIndex}`} className={props.layoutName}>
     <Col xs={12}>
       {(() => {
         switch (props.acf.input_type) {
