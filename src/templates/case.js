@@ -46,7 +46,7 @@ const BreadcrumbBar = styled.div`
   background: #333;
   color: #9d9d9d;
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 5rem;
 `;
 
 const TagTitle = styled.h2`
