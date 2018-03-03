@@ -55,93 +55,93 @@ const TagTitle = styled.h2`
   padding: 1rem 0;
 `;
 
-const CaseTemplate = props => (
-  <Template>
-    {props.data.categories.edges
-      .filter(({ node }) => node.wordpress_id === props.data.case.categories[0])
-      .map(({ node }, index) => (
-        <HeroUnit>
-          <HeroImg
-            key={index}
-            sizes={node.acf.banner_image.localFile.childImageSharp.sizes}
-          />
-          <HeroTitle>{node.name}</HeroTitle>
-        </HeroUnit>
-      ))}
-    <BreadcrumbBar>
+const CaseTemplate = props => {
+  const category = props.data.categories.edges.filter(
+    ({ node }) => node.wordpress_id === props.data.case.categories[0]
+  )[0].node;
+  const tag = props.data.tags.edges.filter(
+    ({ node }) => node.wordpress_id === props.data.case.tags[0]
+  )[0].node;
+  return (
+    <Template>
+      <HeroUnit>
+        <HeroImg
+          sizes={category.acf.banner_image.localFile.childImageSharp.sizes}
+        />
+        <HeroTitle>{category.name}</HeroTitle>
+      </HeroUnit>
+      <BreadcrumbBar>
+        <Grid>
+          <TagTitle>{tag.name}</TagTitle>
+        </Grid>
+      </BreadcrumbBar>
       <Grid>
-        {props.data.tags.edges
-          .filter(({ node }) => node.wordpress_id === props.data.case.tags[0])
-          .map(({ node }, index) => (
-            <TagTitle key={index}>{node.name}</TagTitle>
-          ))}
+        {props.data.case.acf.layouts_case &&
+          props.data.case.acf.layouts_case.map((acf_type, index) => {
+            switch (acf_type.__typename) {
+              case "WordPressAcf_check_your_answer":
+                return (
+                  <CheckYourAnswer
+                    key={`layout-${index}-${acf_type.__typename}`}
+                    layoutName={acf_type.__typename}
+                    layoutIndex={index}
+                    acf={acf_type}
+                  />
+                );
+                break;
+              case "WordPressAcf_input_group":
+                return (
+                  <InputGroup
+                    key={`layout-${index}-${acf_type.__typename}`}
+                    layoutName={acf_type.__typename}
+                    layoutIndex={index}
+                    acf={acf_type}
+                  />
+                );
+                break;
+              case "WordPressAcf_content":
+                return (
+                  <Content
+                    key={`layout-${index}-${acf_type.__typename}`}
+                    layoutName={acf_type.__typename}
+                    layoutIndex={index}
+                    acf={acf_type}
+                  />
+                );
+                break;
+              case "WordPressAcf_image":
+                return (
+                  <Image
+                    key={`layout-${index}-${acf_type.__typename}`}
+                    layoutName={acf_type.__typename}
+                    layoutIndex={index}
+                    acf={acf_type}
+                  />
+                );
+                break;
+              case "WordPressAcf_links":
+                return (
+                  <Links
+                    key={`layout-${index}-${acf_type.__typename}`}
+                    layoutName={acf_type.__typename}
+                    layoutIndex={index}
+                    path={category.slug}
+                    acf={acf_type}
+                  />
+                );
+                break;
+            }
+          })}
       </Grid>
-    </BreadcrumbBar>
-    <Grid>
-      {props.data.case.acf.layouts_case &&
-        props.data.case.acf.layouts_case.map((acf_type, index) => {
-          switch (acf_type.__typename) {
-            case "WordPressAcf_check_your_answer":
-              return (
-                <CheckYourAnswer
-                  key={`layout-${index}-${acf_type.__typename}`}
-                  layoutName={acf_type.__typename}
-                  layoutIndex={index}
-                  acf={acf_type}
-                />
-              );
-              break;
-            case "WordPressAcf_input_group":
-              return (
-                <InputGroup
-                  key={`layout-${index}-${acf_type.__typename}`}
-                  layoutName={acf_type.__typename}
-                  layoutIndex={index}
-                  acf={acf_type}
-                />
-              );
-              break;
-            case "WordPressAcf_content":
-              return (
-                <Content
-                  key={`layout-${index}-${acf_type.__typename}`}
-                  layoutName={acf_type.__typename}
-                  layoutIndex={index}
-                  acf={acf_type}
-                />
-              );
-              break;
-            case "WordPressAcf_image":
-              return (
-                <Image
-                  key={`layout-${index}-${acf_type.__typename}`}
-                  layoutName={acf_type.__typename}
-                  layoutIndex={index}
-                  acf={acf_type}
-                />
-              );
-              break;
-            case "WordPressAcf_links":
-              return (
-                <Links
-                  key={`layout-${index}-${acf_type.__typename}`}
-                  layoutName={acf_type.__typename}
-                  layoutIndex={index}
-                  acf={acf_type}
-                />
-              );
-              break;
-          }
-        })}
-    </Grid>
-  </Template>
-);
+    </Template>
+  );
+};
 
 export default CaseTemplate;
 
 export const caseQuery = graphql`
-  query currentCaseQuery($slug: String!) {
-    case: wordpressWpCases(slug: { eq: $slug }) {
+  query currentCaseQuery($id: String!) {
+    case: wordpressWpCases(id: { eq: $id }) {
       title
       categories
       tags
@@ -194,6 +194,7 @@ export const caseQuery = graphql`
         node {
           name
           wordpress_id
+          slug
           acf {
             banner_image {
               localFile {
@@ -213,6 +214,7 @@ export const caseQuery = graphql`
         node {
           name
           wordpress_id
+          slug
         }
       }
     }

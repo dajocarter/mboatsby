@@ -18,7 +18,7 @@ const Links = props => (
         <Col key={index} sm={columnClasses(index, props.acf.links.length)}>
           <ButtonLink
             className={`btn btn-primary btn-block`}
-            to={`/${button.page.post_name}`}
+            to={`/${props.path}/${button.page.post_name}`}
           >
             {button.text}
           </ButtonLink>

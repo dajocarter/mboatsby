@@ -6,10 +6,12 @@ const IndexPage = () => (
   <Grid>
     <h1>Try out these cases</h1>
     <p>
-      <Link to={`/accc-intro/`}>A Curious Cardiovascular Case</Link>
+      <Link to={`/a-curious-cardiovascular-case/accc-intro/`}>
+        A Curious Cardiovascular Case
+      </Link>
     </p>
     <p>
-      <Link to={`/amm-intro/`}>A Mysterious Mass</Link>
+      <Link to={`/a-mysterious-mass/amm-intro/`}>A Mysterious Mass</Link>
     </p>
   </Grid>
 );
