@@ -5,84 +5,136 @@ import InputGroup from "../components/layouts/InputGroup";
 import Content from "../components/layouts/Content";
 import Image from "../components/layouts/Image";
 import Links from "../components/layouts/Links";
+import Img from "gatsby-image";
 import { Grid } from "react-bootstrap";
 import styled from "styled-components";
 
-const SiteTitle = styled.h1`
-  border-bottom: 1px solid #333;
-  padding-bottom: 0.5rem;
-  letter-spacing: 1px;
+const Template = styled.div``;
+
+const HeroUnit = styled.div`
+  position: relative;
 `;
 
-const CaseTitle = styled.h2`
-  margin: 1rem 0 2rem;
+const HeroImg = styled(Img)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+  height: 200px;
+
+  & > img {
+    object-fit: cover !important;
+    object-position: 0% 0% !important;
+    font-family: "object-fit: cover !important; object-position: 0% 0% !important;";
+  }
+`;
+
+const HeroTitle = styled.h1`
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000;
+  margin: 0;
   text-align: center;
+  text-shadow: 3px 3px 3px #fff;
+`;
+
+const BreadcrumbBar = styled.div`
+  background: #333;
+  color: #9d9d9d;
+  width: 100%;
+  margin-bottom: 2rem;
+`;
+
+const TagTitle = styled.h2`
+  font-size: 1.5rem;
+  margin: 0;
+  padding: 1rem 0;
 `;
 
 const CaseTemplate = props => (
-  <Grid>
-    {props.data.tags.edges
-      .filter(({ node }) => node.wordpress_id === props.data.case.tags[0])
-      .map(({ node }, index) => <SiteTitle key={index}>{node.name}</SiteTitle>)}
+  <Template>
     {props.data.categories.edges
       .filter(({ node }) => node.wordpress_id === props.data.case.categories[0])
-      .map(({ node }, index) => <CaseTitle key={index}>{node.name}</CaseTitle>)}
-    {props.data.case.acf.layouts_case &&
-      props.data.case.acf.layouts_case.map((acf_type, index) => {
-        switch (acf_type.__typename) {
-          case "WordPressAcf_check_your_answer":
-            return (
-              <CheckYourAnswer
-                key={`layout-${index}-${acf_type.__typename}`}
-                layoutName={acf_type.__typename}
-                layoutIndex={index}
-                acf={acf_type}
-              />
-            );
-            break;
-          case "WordPressAcf_input_group":
-            return (
-              <InputGroup
-                key={`layout-${index}-${acf_type.__typename}`}
-                layoutName={acf_type.__typename}
-                layoutIndex={index}
-                acf={acf_type}
-              />
-            );
-            break;
-          case "WordPressAcf_content":
-            return (
-              <Content
-                key={`layout-${index}-${acf_type.__typename}`}
-                layoutName={acf_type.__typename}
-                layoutIndex={index}
-                acf={acf_type}
-              />
-            );
-            break;
-          case "WordPressAcf_image":
-            return (
-              <Image
-                key={`layout-${index}-${acf_type.__typename}`}
-                layoutName={acf_type.__typename}
-                layoutIndex={index}
-                acf={acf_type}
-              />
-            );
-            break;
-          case "WordPressAcf_links":
-            return (
-              <Links
-                key={`layout-${index}-${acf_type.__typename}`}
-                layoutName={acf_type.__typename}
-                layoutIndex={index}
-                acf={acf_type}
-              />
-            );
-            break;
-        }
-      })}
-  </Grid>
+      .map(({ node }, index) => (
+        <HeroUnit>
+          <HeroImg
+            key={index}
+            sizes={node.acf.banner_image.localFile.childImageSharp.sizes}
+          />
+          <HeroTitle>{node.name}</HeroTitle>
+        </HeroUnit>
+      ))}
+    <BreadcrumbBar>
+      <Grid>
+        {props.data.tags.edges
+          .filter(({ node }) => node.wordpress_id === props.data.case.tags[0])
+          .map(({ node }, index) => (
+            <TagTitle key={index}>{node.name}</TagTitle>
+          ))}
+      </Grid>
+    </BreadcrumbBar>
+    <Grid>
+      {props.data.case.acf.layouts_case &&
+        props.data.case.acf.layouts_case.map((acf_type, index) => {
+          switch (acf_type.__typename) {
+            case "WordPressAcf_check_your_answer":
+              return (
+                <CheckYourAnswer
+                  key={`layout-${index}-${acf_type.__typename}`}
+                  layoutName={acf_type.__typename}
+                  layoutIndex={index}
+                  acf={acf_type}
+                />
+              );
+              break;
+            case "WordPressAcf_input_group":
+              return (
+                <InputGroup
+                  key={`layout-${index}-${acf_type.__typename}`}
+                  layoutName={acf_type.__typename}
+                  layoutIndex={index}
+                  acf={acf_type}
+                />
+              );
+              break;
+            case "WordPressAcf_content":
+              return (
+                <Content
+                  key={`layout-${index}-${acf_type.__typename}`}
+                  layoutName={acf_type.__typename}
+                  layoutIndex={index}
+                  acf={acf_type}
+                />
+              );
+              break;
+            case "WordPressAcf_image":
+              return (
+                <Image
+                  key={`layout-${index}-${acf_type.__typename}`}
+                  layoutName={acf_type.__typename}
+                  layoutIndex={index}
+                  acf={acf_type}
+                />
+              );
+              break;
+            case "WordPressAcf_links":
+              return (
+                <Links
+                  key={`layout-${index}-${acf_type.__typename}`}
+                  layoutName={acf_type.__typename}
+                  layoutIndex={index}
+                  acf={acf_type}
+                />
+              );
+              break;
+          }
+        })}
+    </Grid>
+  </Template>
 );
 
 export default CaseTemplate;
@@ -142,6 +194,17 @@ export const caseQuery = graphql`
         node {
           name
           wordpress_id
+          acf {
+            banner_image {
+              localFile {
+                childImageSharp {
+                  sizes {
+                    ...GatsbyImageSharpSizes_tracedSVG
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
