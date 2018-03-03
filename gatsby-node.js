@@ -10,25 +10,33 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
     resolve(
       graphql(`
         {
-          allWordpressPage {
+          pages: allWordpressPage {
             edges {
               node {
                 id
                 wordpress_id
+                wordpress_parent
                 slug
                 status
                 template
               }
             }
           }
-          allWordpressWpCases {
+          cases: allWordpressWpCases {
             edges {
               node {
                 id
-                wordpress_id
                 slug
                 status
-                
+                categories
+              }
+            }
+          }
+          categories: allWordpressCategory {
+            edges {
+              node {
+                wordpress_id
+                slug
               }
             }
           }
@@ -39,27 +47,46 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
           reject(result.errors);
         }
 
-        result.data.allWordpressPage.edges.forEach(({ node }) => {
-          const slug = node.slug;
-          if (node.status === `publish`) {
-            createPage({
-              path: node.slug,
-              component: pageTemplate,
-              context: {
-                slug: node.slug
-              }
-            });
+        result.data.pages.edges.forEach(edge => {
+          const slug = edge.node.slug;
+          if (edge.node.status === `publish`) {
+            if (edge.node.wordpress_parent) {
+              const parentID = edge.node.wordpress_parent;
+              const parent = result.data.pages.edges.filter(
+                ({ node }) => node.wordpress_id === parentID
+              )[0];
+              createPage({
+                path: `${parent.node.slug}/${edge.node.slug}`,
+                component: pageTemplate,
+                context: {
+                  id: edge.node.id
+                }
+              });
+            } else {
+              createPage({
+                path: edge.node.slug,
+                component: pageTemplate,
+                context: {
+                  id: edge.node.id
+                }
+              });
+            }
           }
         });
 
-        result.data.allWordpressWpCases.edges.forEach(({ node }) => {
-          const slug = node.slug;
-          if (node.status === `publish`) {
+        result.data.cases.edges.forEach(edge => {
+          const slug = edge.node.slug;
+          const catID = edge.node.categories[0];
+          const cat = result.data.categories.edges.filter(
+            ({ node }) => node.wordpress_id === catID
+          )[0];
+
+          if (edge.node.status === `publish`) {
             createPage({
-              path: node.slug,
+              path: `${cat.node.slug}/${edge.node.slug}`,
               component: caseTemplate,
               context: {
-                slug: node.slug
+                id: edge.node.id
               }
             });
           }
