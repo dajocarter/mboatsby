@@ -1,24 +1,18 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
-class PageTemplate extends Component {
-  render() {
-    const page = this.props.data.wordpressPage;
-
-    return (
-      <div>
-        <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
-        <div dangerouslySetInnerHTML={{ __html: page.content }} />
-      </div>
-    );
-  }
-}
+const PageTemplate = props => (
+  <div>
+    <h1>{props.data.page.title}</h1>
+    <div dangerouslySetInnerHTML={{ __html: props.data.page.content }} />
+  </div>
+);
 
 export default PageTemplate;
 
 export const pageQuery = graphql`
-  query currentPageQuery($slug: String!) {
-    wordpressPage(slug: { eq: $slug }) {
+  query currentPageQuery($id: String!) {
+    page: wordpressPage(id: { eq: $id }) {
       title
       content
     }
