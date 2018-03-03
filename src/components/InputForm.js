@@ -55,11 +55,13 @@ export default class InputForm extends Component {
   render() {
     return (
       <Form validationState={this.state.validation}>
-        <ControlLabel
-          htmlFor={`input-${this.props.layoutIndex}-${this.props.inputIndex}`}
-        >
-          {this.props.input.label}
-        </ControlLabel>
+        {this.props.input.label && (
+          <ControlLabel
+            htmlFor={`input-${this.props.layoutIndex}-${this.props.inputIndex}`}
+          >
+            {this.props.input.label}
+          </ControlLabel>
+        )}
         <InputGroup>
           <FormControl
             type={`text`}
@@ -84,7 +86,11 @@ export default class InputForm extends Component {
           >
             <Popover
               id={`hint-${this.props.layoutIndex}-${this.props.inputIndex}`}
-              title={`Hint for ${this.props.input.label}`}
+              title={
+                this.props.input.label
+                  ? `Hint for ${this.props.input.label}`
+                  : `Hint`
+              }
             >
               <div
                 dangerouslySetInnerHTML={{ __html: this.props.input.hint }}
