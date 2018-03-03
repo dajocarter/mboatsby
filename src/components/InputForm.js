@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 import {
   FormGroup,
   ControlLabel,
@@ -9,6 +10,12 @@ import {
   Overlay,
   Popover
 } from "react-bootstrap";
+
+const Form = styled(FormGroup)`
+  max-width: 589px;
+  margin-left: auto;
+  margin-right: auto;
+`;
 
 export default class InputForm extends Component {
   constructor(props, context) {
@@ -47,7 +54,7 @@ export default class InputForm extends Component {
 
   render() {
     return (
-      <FormGroup validationState={this.state.validation}>
+      <Form validationState={this.state.validation}>
         <ControlLabel
           htmlFor={`input-${this.props.layoutIndex}-${this.props.inputIndex}`}
         >
@@ -85,7 +92,7 @@ export default class InputForm extends Component {
             </Popover>
           </Overlay>
         )}
-      </FormGroup>
+      </Form>
     );
   }
 }

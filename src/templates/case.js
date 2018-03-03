@@ -171,7 +171,7 @@ export const caseQuery = graphql`
             image {
               localFile {
                 childImageSharp {
-                  sizes(maxWidth: 800) {
+                  sizes(maxWidth: 589) {
                     ...GatsbyImageSharpSizes_tracedSVG
                   }
                 }
