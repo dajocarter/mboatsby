@@ -8,7 +8,11 @@ const CheckYourAnswer = props => (
   <Row id={`layout-${props.layoutIndex}`} className={props.layoutName}>
     {props.acf.inputs &&
       props.acf.inputs.map((input, index) => (
-        <Col key={index} sm={columnClasses(index, props.acf.inputs.length)}>
+        <Col
+          key={index}
+          xs={12}
+          sm={columnClasses(index, props.acf.inputs.length)}
+        >
           <InputForm
             input={input}
             inputIndex={index}

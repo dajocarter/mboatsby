@@ -15,7 +15,11 @@ const Links = props => (
   <Row id={`layout-${props.layoutIndex}`} className={props.layoutName}>
     {props.acf.links &&
       props.acf.links.map((button, index) => (
-        <Col key={index} sm={columnClasses(index, props.acf.links.length)}>
+        <Col
+          key={index}
+          xs={12}
+          sm={columnClasses(index, props.acf.links.length)}
+        >
           <ButtonLink
             className={`btn btn-primary btn-block`}
             to={`/${props.path}/${button.page.post_name}`}
