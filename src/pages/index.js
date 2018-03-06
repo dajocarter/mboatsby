@@ -13,6 +13,14 @@ const IndexPage = () => (
     <p>
       <Link to={`/a-mysterious-mass/amm-intro/`}>A Mysterious Mass</Link>
     </p>
+    <p>
+      <Link to={`/the-suspicious-lesion/tsl-intro/`}>
+        The Suspicious Lesion
+      </Link>
+    </p>
+    <p>
+      <Link to={`/a-night-in-the-er/ner-intro/`}>A Night in the E.R.</Link>
+    </p>
   </Grid>
 );
 
