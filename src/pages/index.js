@@ -52,8 +52,9 @@ const ColumnTitle = styled.h3`
 
 const ButtonLink = styled(Link)`
   max-width: 220px;
-  margin-left: auto;
-  margin-right: auto;
+  && {
+    margin: 0 auto 2rem;
+  }
 `;
 
 const IndexPage = props => (
