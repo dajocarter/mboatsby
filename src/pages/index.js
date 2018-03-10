@@ -6,8 +6,8 @@ import styled from "styled-components";
 import { columnClasses } from "../utils/helpers";
 
 const CircleImg = styled(Img)`
-  height: 250px;
-  width: 250px;
+  height: 220px;
+  width: 220px;
   border-radius: 50%;
   margin-left: auto;
   margin-right: auto;
@@ -18,7 +18,7 @@ const ColumnTitle = styled.h3`
 `;
 
 const ButtonLink = styled(Link)`
-  max-width: 250px;
+  max-width: 220px;
   margin-left: auto;
   margin-right: auto;
 `;
@@ -80,7 +80,7 @@ export const homeQuery = graphql`
             column_image {
               localFile {
                 childImageSharp {
-                  sizes(maxWidth: 250) {
+                  sizes(maxWidth: 220) {
                     ...GatsbyImageSharpSizes_tracedSVG
                   }
                 }
