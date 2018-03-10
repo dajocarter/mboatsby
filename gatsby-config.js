@@ -13,6 +13,13 @@ module.exports = {
     `gatsby-plugin-sharp`,
     `gatsby-plugin-styled-components`,
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `uploads`,
+        path: `${__dirname}/src/uploads/`
+      }
+    },
+    {
       resolve: `gatsby-source-wordpress`,
       options: {
         baseUrl: `mboa.tribestaging.com`,
