@@ -7,6 +7,7 @@ import { Navbar, Nav, NavDropdown, MenuItem } from "react-bootstrap";
 const SiteHeader = styled(Navbar)`
   && {
     border-radius: 0;
+    border-bottom: 0;
     margin-bottom: 0;
   }
 `;
