@@ -107,6 +107,53 @@ const IndexPage = props => (
           })}
         </Row>
       ))}
+      <Row>
+        <Col xs={12}>
+          <h2>Learn More About the Cases</h2>
+        </Col>
+        <Col xs={12} sm={6}>
+          <ColumnTitle>What is a Flipped Class?</ColumnTitle>
+          <div>
+            <p>
+              Watch this{" "}
+              <a
+                href="https://www.youtube.com/watch?v=iQWvc6qhTds"
+                target="_blank"
+              >
+                video
+              </a>{" "}
+              explaining what a flipped class is, and then check out this{" "}
+              <a
+                href="https://www.knewton.com/wp-content/uploads/flipped-classroom-1.jpg"
+                target="_blank"
+              >
+                infographic
+              </a>{" "}
+              to learn more about flipped classes.
+            </p>
+          </div>
+        </Col>
+        <Col xs={12} sm={6}>
+          <ColumnTitle>Download Links</ColumnTitle>
+          <div>
+            <p>
+              Download the HAPS 2015 Workshop Presentation as{" "}
+              <a href={props.data.pptx.publicURL} target="_blank">
+                a .pptx file
+              </a>,{" "}
+              <a href={props.data.ppt.publicURL} target="_blank">
+                a .ppt file
+              </a>, or{" "}
+              <a href={props.data.pdfs.edges[1].node.publicURL} target="_blank">
+                a .pdf file
+              </a>. Also available for download is my{" "}
+              <a href={props.data.pdfs.edges[0].node.publicURL} target="_blank">
+                AAA 2015 poster
+              </a>
+            </p>
+          </div>
+        </Col>
+      </Row>
     </Grid>
   </Template>
 );
@@ -165,6 +212,19 @@ export const homeQuery = graphql`
           slug
         }
       }
+    }
+    pdfs: allFile(filter: { extension: { eq: "pdf" } }) {
+      edges {
+        node {
+          publicURL
+        }
+      }
+    }
+    ppt: file(extension: { eq: "ppt" }) {
+      publicURL
+    }
+    pptx: file(extension: { eq: "pptx" }) {
+      publicURL
     }
   }
 `;
