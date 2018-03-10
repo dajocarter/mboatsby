@@ -12,6 +12,7 @@
     "gatsby-plugin-sass": "^1.0.17",
     "gatsby-plugin-sharp": "^1.6.35",
     "gatsby-plugin-styled-components": "^2.0.9",
+    "gatsby-source-filesystem": "^1.5.27",
     "gatsby-source-wordpress": "^2.0.61",
     "gatsby-transformer-sharp": "^1.6.21",
     "react-bootstrap": "^0.32.1",
