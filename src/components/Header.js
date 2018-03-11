@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Link from "gatsby-link";
 import styled from "styled-components";
+import { auth } from "../firebase";
 import { Navbar, Nav, NavDropdown, MenuItem } from "react-bootstrap";
 
 const SiteHeader = styled(Navbar)`
@@ -14,7 +15,11 @@ const SiteHeader = styled(Navbar)`
 
 const NavItem = styled.li``;
 
-const Header = props => (
+const Logout = styled(Navbar.Link)`
+  cursor: pointer;
+`;
+
+const Header = (props, { authUser }) => (
   <SiteHeader
     inverse
     fixedTop
@@ -44,12 +49,26 @@ const Header = props => (
             </NavItem>
           ))}
         </NavDropdown>
+
+        {authUser ? (
+          <NavItem>
+            <Logout onClick={auth.doSignOut}>Logout</Logout>
+          </NavItem>
+        ) : (
+          <NavItem>
+            <Link to="/login/">Login</Link>
+          </NavItem>
+        )}
       </Nav>
     </Navbar.Collapse>
   </SiteHeader>
 );
 
 export default Header;
+
+Header.contextTypes = {
+  authUser: PropTypes.object
+};
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
