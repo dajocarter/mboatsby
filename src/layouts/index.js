@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Link from "gatsby-link";
 import Helmet from "react-helmet";
+import withAuthentication from "../components/firebase/withAuthentication";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "bootstrap/dist/css/bootstrap.css";
@@ -31,7 +32,7 @@ TemplateWrapper.propTypes = {
   data: PropTypes.object.isRequired
 };
 
-export default TemplateWrapper;
+export default withAuthentication(TemplateWrapper);
 
 export const indexQuery = graphql`
   query indexQuery {
