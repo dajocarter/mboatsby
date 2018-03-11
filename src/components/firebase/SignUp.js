@@ -1,6 +1,27 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { auth, db } from "../../firebase";
+import Link from "gatsby-link";
+import { FormGroup, FormControl, Button } from "react-bootstrap";
+import styled from "styled-components";
+
+const Form = styled.form`
+  background: #e0e0e0;
+  margin: 6rem 0;
+  padding: 2rem;
+`;
+
+const FormTitle = styled.h1`
+  margin-top: 0;
+  text-align: center;
+`;
+
+const FormLinks = styled(FormControl.Static)`
+  text-align: center;
+  && {
+    padding: 1.5rem 0 0;
+  }
+`;
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value
@@ -63,47 +84,64 @@ class SignUpForm extends Component {
       email === "";
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={username}
-          onChange={event =>
-            this.setState(updateByPropertyName("username", event.target.value))
-          }
-          type="text"
-          placeholder="Full Name"
-        />
-        <input
-          value={email}
-          onChange={event =>
-            this.setState(updateByPropertyName("email", event.target.value))
-          }
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          value={password}
-          onChange={event =>
-            this.setState(updateByPropertyName("password", event.target.value))
-          }
-          type="password"
-          placeholder="Password"
-        />
-        <input
-          value={passwordConfirmation}
-          onChange={event =>
-            this.setState(
-              updateByPropertyName("passwordConfirmation", event.target.value)
-            )
-          }
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <button disabled={isInvalid} type="submit">
+      <Form onSubmit={this.onSubmit}>
+        <FormTitle>My Brain on Anatomy</FormTitle>
+        <FormGroup controlId="username">
+          <FormControl
+            value={username}
+            onChange={event =>
+              this.setState(
+                updateByPropertyName("username", event.target.value)
+              )
+            }
+            type="text"
+            placeholder="Full Name"
+          />
+        </FormGroup>
+        <FormGroup controlId="email">
+          <FormControl
+            value={email}
+            onChange={event =>
+              this.setState(updateByPropertyName("email", event.target.value))
+            }
+            type="email"
+            placeholder="Email Address"
+          />
+        </FormGroup>
+        <FormGroup controlId="password">
+          <FormControl
+            value={password}
+            onChange={event =>
+              this.setState(
+                updateByPropertyName("password", event.target.value)
+              )
+            }
+            type="password"
+            placeholder="Password"
+          />
+        </FormGroup>
+        <FormGroup controlId="passwordConfirmation">
+          <FormControl
+            value={passwordConfirmation}
+            onChange={event =>
+              this.setState(
+                updateByPropertyName("passwordConfirmation", event.target.value)
+              )
+            }
+            type="password"
+            placeholder="Confirm Password"
+          />
+        </FormGroup>
+        <Button bsStyle="primary" block disabled={isInvalid} type="submit">
           Sign Up
-        </button>
+        </Button>
 
-        {error && <p>{error.message}</p>}
-      </form>
+        {error && <FormControl.Static>{error.message}</FormControl.Static>}
+
+        <FormLinks>
+          Already have an account? <Link to="/login">Login</Link>
+        </FormLinks>
+      </Form>
     );
   }
 }
