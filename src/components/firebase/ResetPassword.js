@@ -19,12 +19,11 @@ const updateByPropertyName = (propertyName, value) => () => ({
 });
 
 const INITIAL_STATE = {
-  password: "",
-  passwordConfirmation: "",
+  email: "",
   error: null
 };
 
-export default class ChangePassword extends Component {
+export default class ResetPassword extends Component {
   constructor(props) {
     super(props);
 
@@ -32,10 +31,10 @@ export default class ChangePassword extends Component {
   }
 
   onSubmit = event => {
-    const { password } = this.state;
+    const { email } = this.state;
 
     auth
-      .doPasswordUpdate(password)
+      .doPasswordReset(email)
       .then(() => {
         this.setState(() => ({ ...INITIAL_STATE }));
       })
@@ -47,39 +46,29 @@ export default class ChangePassword extends Component {
   };
 
   render() {
-    const { password, passwordConfirmation, error } = this.state;
+    const { email, error } = this.state;
 
-    const isInvalid = password !== passwordConfirmation || password === "";
+    const isInvalid = email === "";
 
     return (
       <Form onSubmit={this.onSubmit}>
         <FormTitle>My Brain on Anatomy</FormTitle>
-        <FormGroup controlId="password">
+        <FormControl.Static>
+          Enter your email address and we'll send you an email with a link to
+          reset your password.
+        </FormControl.Static>
+        <FormGroup controlId="email">
           <FormControl
-            value={password}
+            value={this.state.email}
             onChange={event =>
-              this.setState(
-                updateByPropertyName("password", event.target.value)
-              )
+              this.setState(updateByPropertyName("email", event.target.value))
             }
-            type="password"
-            placeholder="New Password"
-          />
-        </FormGroup>
-        <FormGroup controlId="passwordConfirmation">
-          <FormControl
-            value={passwordConfirmation}
-            onChange={event =>
-              this.setState(
-                updateByPropertyName("passwordConfirmation", event.target.value)
-              )
-            }
-            type="password"
-            placeholder="Confirm New Password"
+            type="email"
+            placeholder="Email Address"
           />
         </FormGroup>
         <Button bsStyle="primary" block disabled={isInvalid} type="submit">
-          Change Password
+          Reset Password
         </Button>
 
         {error && <FormControl.Static>{error.message}</FormControl.Static>}
