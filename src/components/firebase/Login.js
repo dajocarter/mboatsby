@@ -95,8 +95,14 @@ class LoginForm extends Component {
         {error && <FormControl.Static>{error.message}</FormControl.Static>}
 
         <FormLinks>
-          <Link to="/signup/">Create an account</Link> or{" "}
-          <Link to="reset-password">reset password</Link>
+          Don't have an account? <Link to="/signup/">Create one</Link>
+        </FormLinks>
+        <FormLinks>
+          Forgot your password? <Link to="/reset-password/">Reset it</Link>
+        </FormLinks>
+        <FormLinks>
+          Want to change your password?{" "}
+          <Link to="/change-password/">Change it</Link>
         </FormLinks>
       </Form>
     );
