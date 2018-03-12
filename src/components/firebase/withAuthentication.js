@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { firebase } from "../../firebase";
+import { firebase } from "../../utils/firebase";
 
 const withAuthentication = Component => {
   class WithAuthentication extends React.Component {
@@ -8,21 +8,21 @@ const withAuthentication = Component => {
       super(props);
 
       this.state = {
-        authUser: null
+        currentUser: null
       };
     }
 
     getChildContext() {
       return {
-        authUser: this.state.authUser
+        currentUser: this.state.currentUser
       };
     }
 
     componentDidMount() {
-      firebase.auth.onAuthStateChanged(authUser => {
-        authUser
-          ? this.setState(() => ({ authUser }))
-          : this.setState(() => ({ authUser: null }));
+      firebase.auth().onAuthStateChanged(currentUser => {
+        currentUser
+          ? this.setState({ currentUser })
+          : this.setState({ currentUser: null });
       });
     }
 
@@ -32,7 +32,7 @@ const withAuthentication = Component => {
   }
 
   WithAuthentication.childContextTypes = {
-    authUser: PropTypes.object
+    currentUser: PropTypes.object
   };
 
   return WithAuthentication;

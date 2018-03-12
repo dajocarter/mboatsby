@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Link from "gatsby-link";
 import styled from "styled-components";
-import { auth } from "../firebase";
+import { firebase } from "../utils/firebase";
 import { Navbar, Nav, NavDropdown, MenuItem } from "react-bootstrap";
 
 const SiteHeader = styled(Navbar)`
@@ -19,7 +19,7 @@ const Logout = styled(Navbar.Link)`
   cursor: pointer;
 `;
 
-const Header = (props, { authUser }) => (
+const Header = (props, { currentUser }) => (
   <SiteHeader
     inverse
     fixedTop
@@ -50,9 +50,15 @@ const Header = (props, { authUser }) => (
           ))}
         </NavDropdown>
 
-        {authUser ? (
+        {currentUser ? (
           <NavItem>
-            <Logout onClick={auth.doSignOut}>Logout</Logout>
+            <Logout
+              onClick={() => {
+                firebase.auth().signOut();
+              }}
+            >
+              Logout
+            </Logout>
           </NavItem>
         ) : (
           <NavItem>
@@ -67,7 +73,7 @@ const Header = (props, { authUser }) => (
 export default Header;
 
 Header.contextTypes = {
-  authUser: PropTypes.object
+  currentUser: PropTypes.object
 };
 
 Header.propTypes = {

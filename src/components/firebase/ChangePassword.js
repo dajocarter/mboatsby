@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { auth } from "../../firebase";
+import { firebase } from "../../utils/firebase";
 import { FormGroup, FormControl, Button } from "react-bootstrap";
 import styled from "styled-components";
 
@@ -14,75 +14,79 @@ const FormTitle = styled.h1`
   text-align: center;
 `;
 
-const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value
-});
-
-const INITIAL_STATE = {
-  password: "",
-  passwordConfirmation: "",
-  error: null
-};
-
 export default class ChangePassword extends Component {
   constructor(props) {
     super(props);
+    this.state = { password: "", passwordConfirmation: "", error: null };
 
-    this.state = { ...INITIAL_STATE };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  onSubmit = event => {
-    const { password } = this.state;
+  handleChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
 
-    auth
-      .doPasswordUpdate(password)
+    this.setState({ [name]: value });
+  }
+
+  handleSubmit(event) {
+    firebase
+      .auth()
+      .currentUser.updatePassword(this.state.password)
       .then(() => {
-        this.setState(() => ({ ...INITIAL_STATE }));
+        this.setState({
+          password: "",
+          passwordConfirmation: "",
+          error: null
+        });
       })
-      .catch(error => {
-        this.setState(updateByPropertyName("error", error));
-      });
+      .catch(error => this.setState({ error: error }));
 
     event.preventDefault();
-  };
+  }
 
   render() {
-    const { password, passwordConfirmation, error } = this.state;
-
-    const isInvalid = password !== passwordConfirmation || password === "";
-
     return (
-      <Form onSubmit={this.onSubmit}>
+      <Form onSubmit={this.handleSubmit}>
         <FormTitle>My Brain on Anatomy</FormTitle>
+
         <FormGroup controlId="password">
           <FormControl
-            value={password}
-            onChange={event =>
-              this.setState(
-                updateByPropertyName("password", event.target.value)
-              )
-            }
             type="password"
             placeholder="New Password"
+            name="password"
+            value={this.state.password}
+            onChange={this.handleChange}
           />
         </FormGroup>
+
         <FormGroup controlId="passwordConfirmation">
           <FormControl
-            value={passwordConfirmation}
-            onChange={event =>
-              this.setState(
-                updateByPropertyName("passwordConfirmation", event.target.value)
-              )
-            }
             type="password"
             placeholder="Confirm New Password"
+            name="passwordConfirmation"
+            value={this.state.passwordConfirmation}
+            onChange={this.handleChange}
           />
         </FormGroup>
-        <Button bsStyle="primary" block disabled={isInvalid} type="submit">
+
+        <Button
+          block
+          bsStyle="primary"
+          type="submit"
+          disabled={
+            this.state.password !== this.state.passwordConfirmation ||
+            this.state.password === ""
+          }
+        >
           Change Password
         </Button>
 
-        {error && <FormControl.Static>{error.message}</FormControl.Static>}
+        {this.state.error && (
+          <FormControl.Static>{this.state.error.message}</FormControl.Static>
+        )}
       </Form>
     );
   }

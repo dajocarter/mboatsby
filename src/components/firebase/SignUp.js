@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { auth, db } from "../../firebase";
+import { firebase } from "../../utils/firebase";
 import Link from "gatsby-link";
 import { FormGroup, FormControl, Button } from "react-bootstrap";
 import styled from "styled-components";
@@ -23,120 +23,94 @@ const FormLinks = styled(FormControl.Static)`
   }
 `;
 
-const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value
-});
-
-const INITIAL_STATE = {
-  username: "",
-  email: "",
-  password: "",
-  passwordConfirmation: "",
-  error: null
-};
-
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+      error: null
+    };
 
-    this.state = { ...INITIAL_STATE };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  onSubmit = event => {
-    const { username, email, password } = this.state;
+  handleChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
 
-    const { history } = this.props;
+    this.setState({ [name]: value });
+  }
 
-    auth
-      .doCreateUserWithEmailAndPassword(email, password)
-      .then(authUser => {
-        // Create a user in your own accessible Firebase Database too
-        db
-          .doCreateUser(authUser.uid, username, email)
-          .then(() => {
-            this.setState(() => ({ ...INITIAL_STATE }));
-            history.push("/");
-          })
-          .catch(error => {
-            this.setState(updateByPropertyName("error", error));
-          });
+  handleSubmit(event) {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => {
+        this.setState({
+          email: "",
+          password: "",
+          passwordConfirmation: "",
+          error: null
+        });
+        this.props.history.push("/");
       })
-      .catch(error => {
-        this.setState(updateByPropertyName("error", error));
-      });
+      .catch(error => this.setState({ error: error }));
 
     event.preventDefault();
-  };
+  }
 
   render() {
-    const {
-      username,
-      email,
-      password,
-      passwordConfirmation,
-      error
-    } = this.state;
-
-    const isInvalid =
-      password !== passwordConfirmation ||
-      password === "" ||
-      username === "" ||
-      email === "";
-
     return (
-      <Form onSubmit={this.onSubmit}>
+      <Form onSubmit={this.handleSubmit}>
         <FormTitle>My Brain on Anatomy</FormTitle>
-        <FormGroup controlId="username">
-          <FormControl
-            value={username}
-            onChange={event =>
-              this.setState(
-                updateByPropertyName("username", event.target.value)
-              )
-            }
-            type="text"
-            placeholder="Full Name"
-          />
-        </FormGroup>
         <FormGroup controlId="email">
           <FormControl
-            value={email}
-            onChange={event =>
-              this.setState(updateByPropertyName("email", event.target.value))
-            }
             type="email"
             placeholder="Email Address"
+            name="email"
+            value={this.state.email}
+            onChange={this.handleChange}
           />
         </FormGroup>
         <FormGroup controlId="password">
           <FormControl
-            value={password}
-            onChange={event =>
-              this.setState(
-                updateByPropertyName("password", event.target.value)
-              )
-            }
             type="password"
             placeholder="Password"
+            name="password"
+            value={this.state.password}
+            onChange={this.handleChange}
           />
         </FormGroup>
         <FormGroup controlId="passwordConfirmation">
           <FormControl
-            value={passwordConfirmation}
-            onChange={event =>
-              this.setState(
-                updateByPropertyName("passwordConfirmation", event.target.value)
-              )
-            }
             type="password"
             placeholder="Confirm Password"
+            name="passwordConfirmation"
+            value={this.state.passwordConfirmation}
+            onChange={this.handleChange}
           />
         </FormGroup>
-        <Button bsStyle="primary" block disabled={isInvalid} type="submit">
+        <Button
+          bsStyle="primary"
+          block
+          disabled={
+            this.state.password !== this.state.passwordConfirmation ||
+            this.state.password === "" ||
+            this.state.username === "" ||
+            this.state.email === ""
+          }
+          type="submit"
+        >
           Sign Up
         </Button>
 
-        {error && <FormControl.Static>{error.message}</FormControl.Static>}
+        {this.state.error && (
+          <FormControl.Static>{this.state.error.message}</FormControl.Static>
+        )}
 
         <FormLinks>
           Already have an account? <Link to="/login">Login</Link>

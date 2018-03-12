@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { auth } from "../../firebase";
+import { firebase } from "../../utils/firebase";
 import { FormGroup, FormControl, Button } from "react-bootstrap";
 import styled from "styled-components";
 
@@ -14,44 +14,38 @@ const FormTitle = styled.h1`
   text-align: center;
 `;
 
-const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value
-});
-
-const INITIAL_STATE = {
-  email: "",
-  error: null
-};
-
 export default class ResetPassword extends Component {
   constructor(props) {
     super(props);
+    this.state = { email: "", error: null };
 
-    this.state = { ...INITIAL_STATE };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  onSubmit = event => {
-    const { email } = this.state;
+  handleChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
 
-    auth
-      .doPasswordReset(email)
+    this.setState({ [name]: value });
+  }
+
+  handleSubmit(event) {
+    firebase
+      .auth()
+      .sendPasswordResetEmail(this.state.email)
       .then(() => {
-        this.setState(() => ({ ...INITIAL_STATE }));
+        this.setState({ email: "", error: null });
       })
-      .catch(error => {
-        this.setState(updateByPropertyName("error", error));
-      });
+      .catch(error => this.setState({ error: error }));
 
     event.preventDefault();
-  };
+  }
 
   render() {
-    const { email, error } = this.state;
-
-    const isInvalid = email === "";
-
     return (
-      <Form onSubmit={this.onSubmit}>
+      <Form onSubmit={this.handleSubmit}>
         <FormTitle>My Brain on Anatomy</FormTitle>
         <FormControl.Static>
           Enter your email address and we'll send you an email with a link to
@@ -59,19 +53,25 @@ export default class ResetPassword extends Component {
         </FormControl.Static>
         <FormGroup controlId="email">
           <FormControl
-            value={this.state.email}
-            onChange={event =>
-              this.setState(updateByPropertyName("email", event.target.value))
-            }
             type="email"
             placeholder="Email Address"
+            name="email"
+            value={this.state.email}
+            onChange={this.handleChange}
           />
         </FormGroup>
-        <Button bsStyle="primary" block disabled={isInvalid} type="submit">
+        <Button
+          block
+          bsStyle="primary"
+          type="submit"
+          disabled={this.state.email === ""}
+        >
           Reset Password
         </Button>
 
-        {error && <FormControl.Static>{error.message}</FormControl.Static>}
+        {this.state.error && (
+          <FormControl.Static>{this.state.error.message}</FormControl.Static>
+        )}
       </Form>
     );
   }

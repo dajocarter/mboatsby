@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Link from "gatsby-link";
-import { auth } from "../../firebase";
+import { firebase } from "../../utils/firebase";
 import { FormGroup, FormControl, Button } from "react-bootstrap";
 import styled from "styled-components";
 
@@ -23,76 +23,70 @@ const FormLinks = styled(FormControl.Static)`
   }
 `;
 
-const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value
-});
-
-const INITIAL_STATE = {
-  email: "",
-  password: "",
-  error: null
-};
-
 class LoginForm extends Component {
   constructor(props) {
     super(props);
+    this.state = { email: "", password: "", error: null };
 
-    this.state = { ...INITIAL_STATE };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  onSubmit = event => {
-    const { email, password } = this.state;
+  handleChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
 
-    const { history } = this.props;
+    this.setState({ [name]: value });
+  }
 
-    auth
-      .doSignInWithEmailAndPassword(email, password)
+  handleSubmit(event) {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
-        this.setState(() => ({ ...INITIAL_STATE }));
-        history.push("/");
+        this.setState({ email: "", password: "", error: null });
+        this.props.history.push("/");
       })
-      .catch(error => {
-        this.setState(updateByPropertyName("error", error));
-      });
+      .catch(error => this.setState({ error: error }));
 
     event.preventDefault();
-  };
+  }
 
   render() {
-    const { email, password, error } = this.state;
-
-    const isInvalid = password === "" || email === "";
-
     return (
-      <Form onSubmit={this.onSubmit}>
+      <Form onSubmit={this.handleSubmit}>
         <FormTitle>My Brain on Anatomy</FormTitle>
         <FormGroup controlId="email">
           <FormControl
             type="email"
             placeholder="Email Address"
-            value={email}
-            onChange={event =>
-              this.setState(updateByPropertyName("email", event.target.value))
-            }
+            name="email"
+            value={this.state.email}
+            onChange={this.handleChange}
           />
         </FormGroup>
         <FormGroup controlId="password">
           <FormControl
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={event =>
-              this.setState(
-                updateByPropertyName("password", event.target.value)
-              )
-            }
+            name="password"
+            value={this.state.password}
+            onChange={this.handleChange}
           />
         </FormGroup>
-        <Button block bsStyle="primary" disabled={isInvalid} type="submit">
+        <Button
+          block
+          bsStyle="primary"
+          type="submit"
+          disabled={this.state.password === "" || this.state.email === ""}
+        >
           Login
         </Button>
 
-        {error && <FormControl.Static>{error.message}</FormControl.Static>}
+        {this.state.error && (
+          <FormControl.Static>{this.state.error.message}</FormControl.Static>
+        )}
 
         <FormLinks>
           Don't have an account? <Link to="/signup/">Create one</Link>
