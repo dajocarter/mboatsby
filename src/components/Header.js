@@ -17,7 +17,7 @@ const NavItem = styled.li``;
 
 const Logout = styled(Navbar.Link)`
   cursor: pointer;
-  && {
+  &&& {
     color: #333;
     &:hover {
       color: #333;
