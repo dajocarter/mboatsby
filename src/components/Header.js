@@ -17,6 +17,12 @@ const NavItem = styled.li``;
 
 const Logout = styled(Navbar.Link)`
   cursor: pointer;
+  && {
+    color: #333;
+    &:hover {
+      color: #333;
+    }
+  }
 `;
 
 const Header = (props, { currentUser }) => (
@@ -51,15 +57,33 @@ const Header = (props, { currentUser }) => (
         </NavDropdown>
 
         {currentUser ? (
-          <NavItem>
-            <Logout
-              onClick={() => {
-                firebase.auth().signOut();
-              }}
-            >
-              Logout
-            </Logout>
-          </NavItem>
+          <NavDropdown
+            eventKey={2}
+            title={
+              currentUser.displayName
+                ? currentUser.displayName
+                : currentUser.email
+            }
+            id="user-dropdown"
+          >
+            <NavItem role="presentation">
+              <Link
+                to="/my-account"
+                activeClassName="active"
+                role="menuitem"
+                tabIndex="-1"
+              >
+                My Account
+              </Link>
+              <Logout
+                onClick={() => {
+                  firebase.auth().signOut();
+                }}
+              >
+                Logout
+              </Logout>
+            </NavItem>
+          </NavDropdown>
         ) : (
           <NavItem>
             <Link to="/login/">Login</Link>
