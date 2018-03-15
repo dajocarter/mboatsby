@@ -14,10 +14,10 @@ const FormTitle = styled.h1`
   text-align: center;
 `;
 
-export default class ChangePassword extends Component {
+export default class ChangeEmail extends Component {
   constructor(props) {
     super(props);
-    this.state = { password: "", passwordConfirmation: "", error: null };
+    this.state = { email: "", emailConfirmation: "", error: null };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,11 +34,11 @@ export default class ChangePassword extends Component {
   handleSubmit(event) {
     firebase
       .auth()
-      .currentUser.updatePassword(this.state.password)
+      .currentUser.updateEmail(this.state.email)
       .then(() => {
         this.setState({
-          password: "",
-          passwordConfirmation: "",
+          email: "",
+          emailConfirmation: "",
           error: null
         });
       })
@@ -48,27 +48,27 @@ export default class ChangePassword extends Component {
   }
 
   render() {
-    const { password, passwordConfirmation, error } = this.state;
+    const { email, emailConfirmation, error } = this.state;
     return (
       <Form onSubmit={this.handleSubmit}>
-        <FormTitle>Change Password</FormTitle>
+        <FormTitle>Change Email</FormTitle>
 
-        <FormGroup controlId="password">
+        <FormGroup controlId="email">
           <FormControl
-            type="password"
-            placeholder="New Password"
-            name="password"
-            value={password}
+            type="email"
+            placeholder="New Email"
+            name="email"
+            value={email}
             onChange={this.handleChange}
           />
         </FormGroup>
 
-        <FormGroup controlId="passwordConfirmation">
+        <FormGroup controlId="emailConfirmation">
           <FormControl
-            type="password"
-            placeholder="Confirm Password"
-            name="passwordConfirmation"
-            value={passwordConfirmation}
+            type="email"
+            placeholder="Confirm Email"
+            name="emailConfirmation"
+            value={emailConfirmation}
             onChange={this.handleChange}
           />
         </FormGroup>
@@ -77,9 +77,9 @@ export default class ChangePassword extends Component {
           block
           bsStyle="primary"
           type="submit"
-          disabled={password !== passwordConfirmation || password === ""}
+          disabled={email !== emailConfirmation || email === ""}
         >
-          Change Password
+          Change Email
         </Button>
 
         {error && <FormControl.Static>{error.message}</FormControl.Static>}

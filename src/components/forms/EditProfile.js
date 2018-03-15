@@ -14,10 +14,10 @@ const FormTitle = styled.h1`
   text-align: center;
 `;
 
-export default class ChangePassword extends Component {
+export default class ChangeEmail extends Component {
   constructor(props) {
     super(props);
-    this.state = { password: "", passwordConfirmation: "", error: null };
+    this.state = { displayName: "", phoneNumber: "", error: null };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -32,13 +32,14 @@ export default class ChangePassword extends Component {
   }
 
   handleSubmit(event) {
+    const { displayName, phoneNumber } = this.state;
     firebase
       .auth()
-      .currentUser.updatePassword(this.state.password)
+      .currentUser.updateProfile({ displayName, phoneNumber })
       .then(() => {
         this.setState({
-          password: "",
-          passwordConfirmation: "",
+          displayName: "",
+          phoneNumber: "",
           error: null
         });
       })
@@ -48,27 +49,27 @@ export default class ChangePassword extends Component {
   }
 
   render() {
-    const { password, passwordConfirmation, error } = this.state;
+    const { displayName, phoneNumber, error } = this.state;
     return (
       <Form onSubmit={this.handleSubmit}>
-        <FormTitle>Change Password</FormTitle>
+        <FormTitle>Edit Profile</FormTitle>
 
-        <FormGroup controlId="password">
+        <FormGroup controlId="displayName">
           <FormControl
-            type="password"
-            placeholder="New Password"
-            name="password"
-            value={password}
+            type="text"
+            placeholder="Full Name"
+            name="displayName"
+            value={displayName}
             onChange={this.handleChange}
           />
         </FormGroup>
 
-        <FormGroup controlId="passwordConfirmation">
+        <FormGroup controlId="phoneNumber">
           <FormControl
-            type="password"
-            placeholder="Confirm Password"
-            name="passwordConfirmation"
-            value={passwordConfirmation}
+            type="text"
+            placeholder="(555) 555-5555"
+            name="phoneNumber"
+            value={phoneNumber}
             onChange={this.handleChange}
           />
         </FormGroup>
@@ -77,9 +78,9 @@ export default class ChangePassword extends Component {
           block
           bsStyle="primary"
           type="submit"
-          disabled={password !== passwordConfirmation || password === ""}
+          disabled={displayName === "" && phoneNumber === ""}
         >
-          Change Password
+          Update Profile
         </Button>
 
         {error && <FormControl.Static>{error.message}</FormControl.Static>}
