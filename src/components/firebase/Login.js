@@ -41,9 +41,11 @@ class LoginForm extends Component {
   }
 
   handleSubmit(event) {
+    const { email, password } = this.state;
+
     firebase
       .auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .signInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ email: "", password: "", error: null });
         this.props.history.push("/");
@@ -54,6 +56,8 @@ class LoginForm extends Component {
   }
 
   render() {
+    const { email, password, error } = this.state;
+
     return (
       <Form onSubmit={this.handleSubmit}>
         <FormTitle>My Brain on Anatomy</FormTitle>
@@ -62,7 +66,7 @@ class LoginForm extends Component {
             type="email"
             placeholder="Email Address"
             name="email"
-            value={this.state.email}
+            value={email}
             onChange={this.handleChange}
           />
         </FormGroup>
@@ -71,7 +75,7 @@ class LoginForm extends Component {
             type="password"
             placeholder="Password"
             name="password"
-            value={this.state.password}
+            value={password}
             onChange={this.handleChange}
           />
         </FormGroup>
@@ -79,14 +83,12 @@ class LoginForm extends Component {
           block
           bsStyle="primary"
           type="submit"
-          disabled={this.state.password === "" || this.state.email === ""}
+          disabled={password === "" || email === ""}
         >
           Login
         </Button>
 
-        {this.state.error && (
-          <FormControl.Static>{this.state.error.message}</FormControl.Static>
-        )}
+        {error && <FormControl.Static>{error.message}</FormControl.Static>}
 
         <FormLinks>
           Don't have an account? <Link to="/signup/">Create one</Link>

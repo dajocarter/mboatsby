@@ -48,6 +48,7 @@ export default class ChangePassword extends Component {
   }
 
   render() {
+    const { password, passwordConfirmation, error } = this.state;
     return (
       <Form onSubmit={this.handleSubmit}>
         <FormTitle>My Brain on Anatomy</FormTitle>
@@ -57,7 +58,7 @@ export default class ChangePassword extends Component {
             type="password"
             placeholder="New Password"
             name="password"
-            value={this.state.password}
+            value={password}
             onChange={this.handleChange}
           />
         </FormGroup>
@@ -67,7 +68,7 @@ export default class ChangePassword extends Component {
             type="password"
             placeholder="Confirm New Password"
             name="passwordConfirmation"
-            value={this.state.passwordConfirmation}
+            value={passwordConfirmation}
             onChange={this.handleChange}
           />
         </FormGroup>
@@ -76,17 +77,12 @@ export default class ChangePassword extends Component {
           block
           bsStyle="primary"
           type="submit"
-          disabled={
-            this.state.password !== this.state.passwordConfirmation ||
-            this.state.password === ""
-          }
+          disabled={password !== passwordConfirmation || password === ""}
         >
           Change Password
         </Button>
 
-        {this.state.error && (
-          <FormControl.Static>{this.state.error.message}</FormControl.Static>
-        )}
+        {error && <FormControl.Static>{error.message}</FormControl.Static>}
       </Form>
     );
   }

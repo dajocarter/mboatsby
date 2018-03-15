@@ -46,9 +46,11 @@ class SignUpForm extends Component {
   }
 
   handleSubmit(event) {
+    const { email, password } = this.state;
+
     firebase
       .auth()
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .createUserWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({
           email: "",
@@ -64,6 +66,8 @@ class SignUpForm extends Component {
   }
 
   render() {
+    const { email, password, passwordConfirmation, error } = this.state;
+
     return (
       <Form onSubmit={this.handleSubmit}>
         <FormTitle>My Brain on Anatomy</FormTitle>
@@ -72,7 +76,7 @@ class SignUpForm extends Component {
             type="email"
             placeholder="Email Address"
             name="email"
-            value={this.state.email}
+            value={email}
             onChange={this.handleChange}
           />
         </FormGroup>
@@ -81,7 +85,7 @@ class SignUpForm extends Component {
             type="password"
             placeholder="Password"
             name="password"
-            value={this.state.password}
+            value={password}
             onChange={this.handleChange}
           />
         </FormGroup>
@@ -90,7 +94,7 @@ class SignUpForm extends Component {
             type="password"
             placeholder="Confirm Password"
             name="passwordConfirmation"
-            value={this.state.passwordConfirmation}
+            value={passwordConfirmation}
             onChange={this.handleChange}
           />
         </FormGroup>
@@ -98,19 +102,14 @@ class SignUpForm extends Component {
           bsStyle="primary"
           block
           disabled={
-            this.state.password !== this.state.passwordConfirmation ||
-            this.state.password === "" ||
-            this.state.username === "" ||
-            this.state.email === ""
+            password !== passwordConfirmation || password === "" || email === ""
           }
           type="submit"
         >
           Sign Up
         </Button>
 
-        {this.state.error && (
-          <FormControl.Static>{this.state.error.message}</FormControl.Static>
-        )}
+        {error && <FormControl.Static>{error.message}</FormControl.Static>}
 
         <FormLinks>
           Already have an account? <Link to="/login">Login</Link>

@@ -44,6 +44,8 @@ export default class ResetPassword extends Component {
   }
 
   render() {
+    const { email, error } = this.state;
+
     return (
       <Form onSubmit={this.handleSubmit}>
         <FormTitle>My Brain on Anatomy</FormTitle>
@@ -56,22 +58,15 @@ export default class ResetPassword extends Component {
             type="email"
             placeholder="Email Address"
             name="email"
-            value={this.state.email}
+            value={email}
             onChange={this.handleChange}
           />
         </FormGroup>
-        <Button
-          block
-          bsStyle="primary"
-          type="submit"
-          disabled={this.state.email === ""}
-        >
+        <Button block bsStyle="primary" type="submit" disabled={email === ""}>
           Reset Password
         </Button>
 
-        {this.state.error && (
-          <FormControl.Static>{this.state.error.message}</FormControl.Static>
-        )}
+        {error && <FormControl.Static>{error.message}</FormControl.Static>}
       </Form>
     );
   }
