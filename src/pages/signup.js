@@ -1,5 +1,5 @@
 import React from "react";
-import SignupForm from "../components/firebase/SignUp";
+import SignupForm from "../components/forms/SignUp";
 import { Grid, Row, Col } from "react-bootstrap";
 
 const SignupPage = () => {

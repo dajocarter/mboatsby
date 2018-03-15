@@ -1,5 +1,5 @@
 import React from "react";
-import ResetPwForm from "../components/firebase/ResetPassword";
+import ResetPwForm from "../components/forms/ResetPassword";
 import { Grid, Row, Col } from "react-bootstrap";
 
 const ResetPasswordPage = () => {

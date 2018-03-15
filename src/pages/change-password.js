@@ -1,5 +1,5 @@
 import React from "react";
-import ChangePwForm from "../components/firebase/ChangePassword";
+import ChangePwForm from "../components/forms/ChangePassword";
 import { Grid, Row, Col } from "react-bootstrap";
 
 const ChangePasswordPage = () => {

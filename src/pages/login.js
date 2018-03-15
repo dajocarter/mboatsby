@@ -1,5 +1,5 @@
 import React from "react";
-import LoginForm from "../components/firebase/Login";
+import LoginForm from "../components/forms/Login";
 import { Grid, Row, Col } from "react-bootstrap";
 
 const LoginPage = () => {
