@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import PropTypes, { string, number } from "prop-types";
+import { storage } from "../../firebase";
+import FileUploader from "react-firebase-file-uploader";
 import {
   Row,
   Col,
   FormGroup,
   ControlLabel,
-  FormControl,
   HelpBlock,
   Button
 } from "react-bootstrap";
@@ -14,43 +15,43 @@ export default class ScavengerHunt extends Component {
   constructor() {
     super();
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(urlbase, uri, base64, token) {
-    let apiUrl = urlbase + "/wp-json/wp/v2/media";
-    let formData = new FormData();
-
-    //dynamically get file type
-    let uriParts = uri.split(".");
-    let fileType = uriParts[uriParts.length - 1];
-
-    //generate some random number for the filename
-    var randNumber1 = Math.floor(Math.random() * 100);
-    var randNumber2 = Math.floor(Math.random() * 100);
-
-    formData.append("file", {
-      base64,
-      name: `photo-${randNumber1}-${randNumber2}.${fileType}`,
-      type: `image/${fileType}`
-    });
-
-    let options = {
-      method: "POST",
-      body: formData,
-      headers: {
-        Accept: "application/json",
-        Authorization: "Bearer " + token,
-        "Content-Type": "multipart/form-data",
-        "Cache-Control": "no-cache"
-      }
+    this.state = {
+      isUploading: false,
+      progress: 0
     };
 
-    console.log("header options: ", options);
-    console.log("form-data options: ", formData);
-
-    return fetch(apiUrl, options);
+    this.handleProgress = this.handleProgress.bind(this);
+    this.handleUploadStart = this.handleUploadStart.bind(this);
+    this.handleUploadError = this.handleUploadError.bind(this);
+    this.handleUploadSuccess = this.handleUploadSuccess.bind(this);
   }
+
+  handleUploadStart = () =>
+    this.setState({
+      isUploading: true,
+      progress: 0
+    });
+
+  handleProgress = progress =>
+    this.setState({
+      progress
+    });
+
+  handleUploadError = error => {
+    this.setState({ isUploading: false });
+    console.error(error);
+  };
+
+  handleUploadSuccess = filename => {
+    this.setState({
+      progress: 100,
+      isUploading: false
+    });
+    storage
+      .ref("images")
+      .child(filename)
+      .getDownloadURL();
+  };
 
   render() {
     return (
@@ -69,8 +70,21 @@ export default class ScavengerHunt extends Component {
           <form>
             <FormGroup controlId="fileUpload">
               <ControlLabel>Upload File</ControlLabel>
-              <FormControl type="file" />
-              <HelpBlock>Upload a .png or .jpg file</HelpBlock>
+              {this.state.isUploading && (
+                <p>Progress: {this.state.progress}%</p>
+              )}
+              <FileUploader
+                accept="image/*"
+                name="screenshot"
+                storageRef={storage.ref("images")}
+                onUploadStart={this.handleUploadStart}
+                onUploadError={this.handleUploadError}
+                onUploadSuccess={this.handleUploadSuccess}
+                onProgress={this.handleProgress}
+              />
+              <HelpBlock>
+                Please use your initials in the filename, e.g., ABC.png
+              </HelpBlock>
             </FormGroup>
             <Button type="submit">Submit</Button>
           </form>
