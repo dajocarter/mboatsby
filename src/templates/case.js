@@ -5,6 +5,7 @@ import InputGroup from "../components/layouts/InputGroup";
 import Content from "../components/layouts/Content";
 import Image from "../components/layouts/Image";
 import Links from "../components/layouts/Links";
+import ScavengerHunt from "../components/layouts/ScavengerHunt";
 import Img from "gatsby-image";
 import { Grid } from "react-bootstrap";
 import styled from "styled-components";
@@ -130,6 +131,17 @@ const CaseTemplate = props => {
                   />
                 );
                 break;
+              case "WordPressAcf_scavenger_hunt":
+                return (
+                  <ScavengerHunt
+                    key={`layout-${index}-${acf_type.__typename}`}
+                    layoutName={acf_type.__typename}
+                    layoutIndex={index}
+                    path={category.slug}
+                    acf={acf_type}
+                  />
+                );
+                break;
             }
           })}
       </Grid>
@@ -185,6 +197,9 @@ export const caseQuery = graphql`
               }
               text
             }
+          }
+          ... on WordPressAcf_scavenger_hunt {
+            content
           }
         }
       }
