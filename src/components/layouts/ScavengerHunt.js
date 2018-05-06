@@ -1,57 +1,38 @@
 import React, { Component } from "react";
 import PropTypes, { string, number } from "prop-types";
 import { storage } from "../../firebase";
-import FileUploader from "react-firebase-file-uploader";
-import {
-  Row,
-  Col,
-  FormGroup,
-  ControlLabel,
-  HelpBlock,
-  Button
-} from "react-bootstrap";
+import { Row, Col, FormGroup, HelpBlock } from "react-bootstrap";
+import styled from "styled-components";
+
+const UploadBtn = styled.label`
+  input[type="file"] {
+    display: none;
+  }
+`;
+
+const Instructions = styled(HelpBlock)`
+  text-align: center;
+`;
 
 export default class ScavengerHunt extends Component {
-  constructor() {
-    super();
-
+  constructor(props) {
+    super(props);
     this.state = {
-      isUploading: false,
-      progress: 0
+      fileSelected: false,
+      fileName: ""
     };
-
-    this.handleProgress = this.handleProgress.bind(this);
-    this.handleUploadStart = this.handleUploadStart.bind(this);
-    this.handleUploadError = this.handleUploadError.bind(this);
-    this.handleUploadSuccess = this.handleUploadSuccess.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleUploadStart = () =>
-    this.setState({
-      isUploading: true,
-      progress: 0
-    });
-
-  handleProgress = progress =>
-    this.setState({
-      progress
-    });
-
-  handleUploadError = error => {
-    this.setState({ isUploading: false });
-    console.error(error);
-  };
-
-  handleUploadSuccess = filename => {
-    this.setState({
-      progress: 100,
-      isUploading: false
-    });
+  handleChange(file) {
+    this.setState({ fileSelected: true, fileName: file.name });
+    console.log(file);
     storage
       .ref("images")
-      .child(filename)
-      .getDownloadURL();
-  };
+      .child(file.name)
+      .put(file)
+      .then(snapshot => console.log(`Successful Upload!`));
+  }
 
   render() {
     return (
@@ -69,24 +50,25 @@ export default class ScavengerHunt extends Component {
         <Col xs={12}>
           <form>
             <FormGroup controlId="fileUpload">
-              <ControlLabel>Upload File</ControlLabel>
-              {this.state.isUploading && (
-                <p>Progress: {this.state.progress}%</p>
-              )}
-              <FileUploader
-                accept="image/*"
-                name="screenshot"
-                storageRef={storage.ref("images")}
-                onUploadStart={this.handleUploadStart}
-                onUploadError={this.handleUploadError}
-                onUploadSuccess={this.handleUploadSuccess}
-                onProgress={this.handleProgress}
-              />
-              <HelpBlock>
-                Please use your initials in the filename, e.g., ABC.png
-              </HelpBlock>
+              <UploadBtn
+                className={`btn btn-block btn-primary`}
+                disabled={this.state.fileSelected}
+              >
+                Upload Screenshot
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple={false}
+                  disabled={this.state.fileSelected}
+                  onChange={event => this.handleChange(event.target.files[0])}
+                />
+              </UploadBtn>
+              <Instructions>
+                {this.state.fileSelected
+                  ? `Uploading ${this.state.fileName}`
+                  : `Please use your initials in the filename, e.g., ABC.png`}
+              </Instructions>
             </FormGroup>
-            <Button type="submit">Submit</Button>
           </form>
         </Col>
       </Row>
