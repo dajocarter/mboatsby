@@ -2,12 +2,63 @@ import React, { Component } from "react";
 import PropTypes, { string, number } from "prop-types";
 import { storage } from "../../firebase";
 import { Row, Col, FormGroup, HelpBlock } from "react-bootstrap";
-import styled from "styled-components";
+import FaCheck from "react-icons/lib/fa/check";
+import FaSpinner from "react-icons/lib/fa/spinner";
+import styled, { keyframes } from "styled-components";
 
 const UploadBtn = styled.label`
   input[type="file"] {
     display: none;
   }
+`;
+
+const Status = styled.div`
+  position: relative;
+  height: 16px;
+`;
+
+const ProgressWell = styled.div`
+  background-color: #ccc;
+  width: calc(100% - 21px);
+  height: 8px;
+  border-radius: 4px;
+  position: absolute;
+  top: 4px;
+  left: 0;
+`;
+
+const ProgressBar = styled.div`
+  background-color: ${props => (props.progress < 100 ? `blue` : `green`)};
+  width: ${props => `${props.progress}%`};
+  height: 8px;
+  border-radius: 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+const rotate = keyframes`
+from {
+  transform: rotate(0deg);
+}
+to {
+  transform: rotate(360deg);
+}
+`;
+
+const Loading = styled(FaSpinner)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: blue;
+  animation: ${rotate} 1s linear infinite;
+`;
+
+const Checkmark = styled(FaCheck)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: green;
 `;
 
 const Instructions = styled(HelpBlock)`
@@ -110,11 +161,18 @@ export default class ScavengerHunt extends Component {
                 />
               </UploadBtn>
               <Instructions>
-                {this.state.fileSelected
-                  ? `Uploading ${this.state.fileName} - ${this.state.progress}%`
-                  : this.state.uploadComplete
-                    ? `Successfully uploaded!`
-                    : `Please include your initials in the filename, e.g., ABC.png`}
+                {this.state.fileSelected || this.state.uploadComplete ? (
+                  <Status>
+                    <ProgressWell>
+                      <ProgressBar progress={this.state.progress} />
+                    </ProgressWell>
+                    {this.state.fileSelected &&
+                      !this.state.uploadComplete && <Loading />}
+                    {this.state.uploadComplete && <Checkmark />}
+                  </Status>
+                ) : (
+                  `Please include your initials in the filename, e.g., ABC.png`
+                )}
               </Instructions>
             </FormGroup>
           </form>
