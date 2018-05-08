@@ -36,9 +36,14 @@ export default class ScavengerHunt extends Component {
   handleChange(file) {
     this.setState({ fileSelected: true, fileName: file.name });
     console.log(file);
+    let pageTitle = this.props.pageTitle
+      .split(" ")
+      .join("-")
+      .toLowerCase();
     let uploadTask = storage
-      .ref("images")
+      .ref()
       .child(this.props.path)
+      .child(pageTitle)
       .child(file.name)
       .put(file);
 

@@ -138,6 +138,7 @@ const CaseTemplate = props => {
                     layoutName={acf_type.__typename}
                     layoutIndex={index}
                     path={category.slug}
+                    pageTitle={props.data.case.title}
                     acf={acf_type}
                   />
                 );
