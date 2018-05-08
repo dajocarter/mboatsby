@@ -92,14 +92,16 @@ export default class ScavengerHunt extends Component {
             <FormGroup controlId="fileUpload">
               <UploadBtn
                 className={`btn btn-block btn-primary`}
-                disabled={this.state.fileSelected}
+                disabled={this.state.fileSelected || this.state.uploadComplete}
               >
                 Upload Screenshot
                 <input
                   type="file"
                   accept="image/*"
                   multiple={false}
-                  disabled={this.state.fileSelected}
+                  disabled={
+                    this.state.fileSelected || this.state.uploadComplete
+                  }
                   onChange={event => this.handleChange(event.target.files[0])}
                 />
               </UploadBtn>
