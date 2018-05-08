@@ -47,7 +47,7 @@ export default class ScavengerHunt extends Component {
             dangerouslySetInnerHTML={{ __html: this.props.acf.content }}
           />
         )}
-        <Col xs={12}>
+        <Col xs={12} sm={8} smOffset={2}>
           <form>
             <FormGroup controlId="fileUpload">
               <UploadBtn
