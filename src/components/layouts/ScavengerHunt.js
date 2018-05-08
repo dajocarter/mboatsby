@@ -94,7 +94,11 @@ export default class ScavengerHunt extends Component {
                 className={`btn btn-block btn-primary`}
                 disabled={this.state.fileSelected || this.state.uploadComplete}
               >
-                Upload Screenshot
+                {this.state.fileSelected
+                  ? `Uploading Screenshot...`
+                  : this.state.uploadComplete
+                    ? `Screenshot Uploaded`
+                    : `Upload Screenshot`}
                 <input
                   type="file"
                   accept="image/*"
