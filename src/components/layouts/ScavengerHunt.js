@@ -14,12 +14,21 @@ const Instructions = styled(HelpBlock)`
   text-align: center;
 `;
 
+const UploadedImg = styled.img`
+  display: block;
+  height: auto;
+  width: 100%;
+`;
+
 export default class ScavengerHunt extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fileSelected: false,
-      fileName: ""
+      fileName: "",
+      progress: 0,
+      uploadComplete: false,
+      imgURL: ""
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -27,11 +36,37 @@ export default class ScavengerHunt extends Component {
   handleChange(file) {
     this.setState({ fileSelected: true, fileName: file.name });
     console.log(file);
-    storage
+    let uploadTask = storage
       .ref("images")
+      .child(this.props.path)
       .child(file.name)
-      .put(file)
-      .then(snapshot => console.log(`Successful Upload!`));
+      .put(file);
+
+    uploadTask.on(
+      "state_changed",
+      snapshot => {
+        let progress = Math.round(
+          snapshot.bytesTransferred / snapshot.totalBytes * 100
+        );
+        this.setState({ progress });
+      },
+      error => {
+        // Handle unsuccessful upload
+      },
+      () => {
+        // Handle successful upload
+        console.log(`Successful Upload!`);
+        this.setState({
+          fileSelected: false,
+          fileName: "",
+          progress: 100,
+          uploadComplete: true
+        });
+        uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+          this.setState({ imgURL: downloadURL });
+        });
+      }
+    );
   }
 
   render() {
@@ -65,12 +100,20 @@ export default class ScavengerHunt extends Component {
               </UploadBtn>
               <Instructions>
                 {this.state.fileSelected
-                  ? `Uploading ${this.state.fileName}`
-                  : `Please use your initials in the filename, e.g., ABC.png`}
+                  ? `Uploading ${this.state.fileName} - ${this.state.progress}%`
+                  : this.state.uploadComplete
+                    ? `Successfully uploaded!`
+                    : `Please include your initials in the filename, e.g., ABC.png`}
               </Instructions>
             </FormGroup>
           </form>
         </Col>
+        {this.state.uploadComplete &&
+          this.state.imgURL && (
+            <Col xs={12}>
+              <UploadedImg src={this.state.imgURL} />
+            </Col>
+          )}
       </Row>
     );
   }
