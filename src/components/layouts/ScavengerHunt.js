@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes, { string, number } from "prop-types";
-import { storage } from "../../utils/firebase";
+import { storage, database } from "../../utils/firebase";
 import { Row, Col, FormGroup, HelpBlock } from "react-bootstrap";
 import FaCheck from "react-icons/lib/fa/check";
 import FaSpinner from "react-icons/lib/fa/spinner";
@@ -120,6 +120,16 @@ export default class ScavengerHunt extends Component {
         });
         uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
           this.setState({ imgURL: downloadURL });
+          let newImgKey = database
+            .ref()
+            .child(this.props.path)
+            .child(pageTitle)
+            .push().key;
+          const imgObject = {};
+          imgObject[
+            `${this.props.path}/${pageTitle}/${newImgKey}`
+          ] = downloadURL;
+          database.ref().update(imgObject);
         });
       }
     );
