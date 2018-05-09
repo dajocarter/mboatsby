@@ -116,6 +116,14 @@ export default class ScavengerHunt extends Component {
     );
   }
 
+  componentWillUnmount() {
+    const pageTitle = this.props.pageTitle
+      .split(" ")
+      .join("-")
+      .toLowerCase();
+    database.ref(`${this.props.path}/${pageTitle}`).off();
+  }
+
   handleChange(file) {
     this.setState({ fileSelected: true, fileName: file.name });
     const pageTitle = this.props.pageTitle
