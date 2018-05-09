@@ -65,11 +65,27 @@ const Instructions = styled(HelpBlock)`
   text-align: center;
 `;
 
+const Gallery = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+`;
+
 const UploadedImg = styled.img`
   display: block;
+  flex: 0 1 auto;
   height: auto;
-  width: 100%;
+  width: 300px;
+  padding: 1rem;
 `;
+
+const saveObjValsInArr = object =>
+  object
+    ? Object.keys(object)
+        .map(key => [object[key]])
+        .reverse()
+    : [];
 
 export default class ScavengerHunt extends Component {
   constructor(props) {
@@ -79,14 +95,25 @@ export default class ScavengerHunt extends Component {
       fileName: "",
       progress: 0,
       uploadComplete: false,
-      imgURL: ""
+      imgURL: "",
+      uploadedImgs: []
     };
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentDidMount() {
+    const pageTitle = this.props.pageTitle
+      .split(" ")
+      .join("-")
+      .toLowerCase();
+    let imgRef = database.ref(`${this.props.path}/${pageTitle}`);
+    imgRef.on("value", snapshot =>
+      this.setState({ uploadedImgs: saveObjValsInArr(snapshot.val()) })
+    );
+  }
+
   handleChange(file) {
     this.setState({ fileSelected: true, fileName: file.name });
-    console.log(file);
     const pageTitle = this.props.pageTitle
       .split(" ")
       .join("-")
@@ -190,13 +217,28 @@ export default class ScavengerHunt extends Component {
         {this.state.uploadComplete &&
           this.state.imgURL && (
             <Col xs={12}>
-              <UploadedImg src={this.state.imgURL} />
+              {!!this.state.uploadedImgs.length && (
+                <ImgArray imgURLs={this.state.uploadedImgs} />
+              )}
             </Col>
           )}
       </Row>
     );
   }
 }
+
+const ImgArray = ({ imgURLs }) => (
+  <div>
+    <h4>All Submissions to this Scavenger Hunt</h4>
+    <Gallery>
+      {imgURLs.map((imgURL, index) => (
+        <a key={index} href={imgURL} target="_blank" rel="nofollow">
+          <UploadedImg src={imgURL} />
+        </a>
+      ))}
+    </Gallery>
+  </div>
+);
 
 ScavengerHunt.propTypes = {
   acf: PropTypes.shape({
