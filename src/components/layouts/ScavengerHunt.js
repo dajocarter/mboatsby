@@ -74,10 +74,10 @@ const Gallery = styled.div`
   flex-flow: row wrap;
   justify-content: space-around;
   align-items: center;
+  text-align: center;
 `;
 
 const UploadedImg = styled.img`
-  display: block;
   flex: 0 1 auto;
   height: auto;
   width: 300px;
@@ -87,7 +87,7 @@ const UploadedImg = styled.img`
 const saveObjValsInArr = object =>
   object
     ? Object.keys(object)
-        .map(key => [object[key]])
+        .map(key => object[key])
         .reverse()
     : [];
 
@@ -165,9 +165,10 @@ export default class ScavengerHunt extends Component {
             .child(pageTitle)
             .push().key;
           const imgObject = {};
-          imgObject[
-            `${this.props.path}/${pageTitle}/${newImgKey}`
-          ] = downloadURL;
+          imgObject[`${this.props.path}/${pageTitle}/${newImgKey}`] = {
+            name: file.name,
+            url: downloadURL
+          };
           database.ref().update(imgObject);
         });
       }
@@ -230,7 +231,7 @@ export default class ScavengerHunt extends Component {
           this.state.imgURL && (
             <Col xs={12}>
               {!!this.state.uploadedImgs.length && (
-                <ImgArray imgURLs={this.state.uploadedImgs} />
+                <ImgArray imgs={this.state.uploadedImgs} />
               )}
             </Col>
           )}
@@ -239,14 +240,17 @@ export default class ScavengerHunt extends Component {
   }
 }
 
-const ImgArray = ({ imgURLs }) => (
+const ImgArray = ({ imgs }) => (
   <div>
     <GalleryTitle>All Submissions to this Scavenger Hunt</GalleryTitle>
     <Gallery>
-      {imgURLs.map((imgURL, index) => (
-        <a key={index} href={imgURL} target="_blank" rel="nofollow">
-          <UploadedImg src={imgURL} />
-        </a>
+      {imgs.map((img, index) => (
+        <div key={index}>
+          <a href={img.url} target="_blank" rel="nofollow">
+            <UploadedImg src={img.url} />
+          </a>
+          <p>{img.name}</p>
+        </div>
       ))}
     </Gallery>
   </div>
