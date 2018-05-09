@@ -65,6 +65,10 @@ const Instructions = styled(HelpBlock)`
   text-align: center;
 `;
 
+const GalleryTitle = styled.h4`
+  text-align: center;
+`;
+
 const Gallery = styled.div`
   display: flex;
   flex-flow: row wrap;
@@ -229,7 +233,7 @@ export default class ScavengerHunt extends Component {
 
 const ImgArray = ({ imgURLs }) => (
   <div>
-    <h4>All Submissions to this Scavenger Hunt</h4>
+    <GalleryTitle>All Submissions to this Scavenger Hunt</GalleryTitle>
     <Gallery>
       {imgURLs.map((imgURL, index) => (
         <a key={index} href={imgURL} target="_blank" rel="nofollow">
