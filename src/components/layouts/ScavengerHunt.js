@@ -87,7 +87,7 @@ export default class ScavengerHunt extends Component {
   handleChange(file) {
     this.setState({ fileSelected: true, fileName: file.name });
     console.log(file);
-    let pageTitle = this.props.pageTitle
+    const pageTitle = this.props.pageTitle
       .split(" ")
       .join("-")
       .toLowerCase();
