@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes, { string, number } from "prop-types";
-import { storage } from "../../firebase";
+import { storage } from "../../utils/firebase";
 import { Row, Col, FormGroup, HelpBlock } from "react-bootstrap";
 import FaCheck from "react-icons/lib/fa/check";
 import FaSpinner from "react-icons/lib/fa/spinner";
