@@ -192,5 +192,7 @@ ScavengerHunt.propTypes = {
   acf: PropTypes.shape({
     content: PropTypes.string.isRequired
   }),
-  layoutIndex: PropTypes.number.isRequired
+  layoutIndex: PropTypes.number.isRequired,
+  path: PropTypes.string.isRequired,
+  pageTitle: PropTypes.string.isRequired
 };
