@@ -147,6 +147,7 @@ export default class ScavengerHunt extends Component {
       },
       error => {
         // Handle unsuccessful upload
+        console.log(error);
       },
       () => {
         // Handle successful upload
