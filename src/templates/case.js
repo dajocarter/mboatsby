@@ -56,12 +56,12 @@ const TagTitle = styled.h2`
   padding: 1rem 0;
 `;
 
-const CaseTemplate = props => {
-  const category = props.data.categories.edges.filter(
-    ({ node }) => node.wordpress_id === props.data.case.categories[0]
+const CaseTemplate = ({ data, isAuthed, uid }) => {
+  const category = data.categories.edges.filter(
+    ({ node }) => node.wordpress_id === data.case.categories[0]
   )[0].node;
-  const tag = props.data.tags.edges.filter(
-    ({ node }) => node.wordpress_id === props.data.case.tags[0]
+  const tag = data.tags.edges.filter(
+    ({ node }) => node.wordpress_id === data.case.tags[0]
   )[0].node;
   return (
     <Template>
@@ -77,8 +77,8 @@ const CaseTemplate = props => {
         </Grid>
       </BreadcrumbBar>
       <Grid>
-        {props.data.case.acf.layouts_case &&
-          props.data.case.acf.layouts_case.map((acf_type, index) => {
+        {data.case.acf.layouts_case &&
+          data.case.acf.layouts_case.map((acf_type, index) => {
             switch (acf_type.__typename) {
               case "WordPressAcf_check_your_answer":
                 return (
@@ -138,8 +138,10 @@ const CaseTemplate = props => {
                     layoutName={acf_type.__typename}
                     layoutIndex={index}
                     path={category.slug}
-                    pageTitle={props.data.case.title}
+                    pageTitle={data.case.title}
                     acf={acf_type}
+                    isAuthed={isAuthed}
+                    uid={uid}
                   />
                 );
                 break;
