@@ -2,7 +2,7 @@ import React from "react";
 import LoginForm from "../components/forms/Login";
 import { Grid, Row, Col } from "react-bootstrap";
 
-const LoginPage = ({ history, signIn, uid }) => {
+const LoginPage = ({ history, signIn }) => {
   return (
     <Grid>
       <Row>
