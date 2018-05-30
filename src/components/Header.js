@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Link from "gatsby-link";
 import styled from "styled-components";
 import { Navbar, Nav, NavDropdown, MenuItem } from "react-bootstrap";
+import SignInOut from "./SignInOut";
 
 const SiteHeader = styled(Navbar)`
   && {
@@ -14,7 +15,7 @@ const SiteHeader = styled(Navbar)`
 
 const NavItem = styled.li``;
 
-const Header = props => (
+const Header = ({ title, menu, isAuthed, signIn, signOut }) => (
   <SiteHeader
     inverse
     fixedTop
@@ -24,14 +25,14 @@ const Header = props => (
   >
     <Navbar.Header>
       <Navbar.Brand>
-        <Link to={`/`}>{props.title}</Link>
+        <Link to={`/`}>{title}</Link>
       </Navbar.Brand>
       <Navbar.Toggle />
     </Navbar.Header>
     <Navbar.Collapse>
       <Nav pullRight role={`navigation`}>
         <NavDropdown eventKey={1} title="Cases" id="menu-dropdown">
-          {props.menu.map((item, index) => (
+          {menu.map((item, index) => (
             <NavItem key={item.wordpress_id} role={`presentation`}>
               <Link
                 to={`/${item.object_slug}`}
@@ -44,6 +45,10 @@ const Header = props => (
             </NavItem>
           ))}
         </NavDropdown>
+        <SignInOut
+          onClick={() => (isAuthed ? signOut() : signIn("google"))}
+          text={isAuthed ? "Sign Out" : "Sign In"}
+        />
       </Nav>
     </Navbar.Collapse>
   </SiteHeader>
@@ -59,5 +64,8 @@ Header.propTypes = {
       title: PropTypes.string.isRequired,
       wordpress_id: PropTypes.number.isRequired
     })
-  )
+  ),
+  signIn: PropTypes.func.isRequired,
+  signOut: PropTypes.func.isRequired,
+  isAuthed: PropTypes.bool
 };
