@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   uid: "",
   isAnonymous: null,
   email: "",
+  password: "",
   displayName: ""
 };
 
@@ -35,13 +36,21 @@ export default class Auth extends Component {
     this.stopAuthListener();
   }
 
-  handleSignIn = provider => {
+  handleSignIn = (provider, email, password) => {
     const { auth } = this.context.firebase;
 
     switch (provider) {
       case "google":
         return auth()
           .signInWithPopup(new auth.GoogleAuthProvider())
+          .catch(error => {
+            console.log(error);
+            // TODO: notify the user of the error
+            return error;
+          });
+      case "email":
+        return auth()
+          .signInWithEmailAndPassword(email, password)
           .catch(error => {
             console.log(error);
             // TODO: notify the user of the error
@@ -68,11 +77,12 @@ export default class Auth extends Component {
   };
 
   signIn(user) {
-    const { uid, isAnonymous, email, displayName } = user;
+    const { uid, isAnonymous, email, password, displayName } = user;
     this.setState({
       uid,
       isAnonymous,
       email,
+      password,
       displayName
     });
   }
