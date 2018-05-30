@@ -26,7 +26,7 @@ const INITIAL_STATE = { email: "", password: "", error: null };
 
 export default class LoginForm extends Component {
   static contextTypes = {
-    firebase: PropTypes.object
+    firebase: PropTypes.object.isRequired
   };
 
   static propTypes = {
