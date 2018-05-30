@@ -1,6 +1,7 @@
 import firebase from "firebase";
 import "firebase/storage";
 import "firebase/database";
+import "firebase/auth";
 
 const config = {
   apiKey: process.env.GATSBY_API_KEY,
