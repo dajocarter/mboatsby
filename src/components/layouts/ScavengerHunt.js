@@ -91,46 +91,65 @@ const saveObjValsInArr = object =>
         .reverse()
     : [];
 
+const INITIAL_STATE = {
+  fileSelected: false,
+  fileName: "",
+  progress: 0,
+  uploadComplete: false,
+  imgURL: "",
+  uploadedImgs: []
+};
+
 export default class ScavengerHunt extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fileSelected: false,
-      fileName: "",
-      progress: 0,
-      uploadComplete: false,
-      imgURL: "",
-      uploadedImgs: []
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
+  static contextTypes = {
+    firebase: PropTypes.object.isRequired
+  };
+
+  static propTypes = {
+    acf: PropTypes.shape({
+      content: PropTypes.string.isRequired
+    }),
+    layoutIndex: PropTypes.number.isRequired,
+    path: PropTypes.string.isRequired,
+    pageTitle: PropTypes.string.isRequired
+  };
+
+  state = INITIAL_STATE;
 
   componentDidMount() {
+    const { database } = this.context.firebase;
     const pageTitle = this.props.pageTitle
       .split(" ")
       .join("-")
       .toLowerCase();
-    let imgRef = database.ref(`${this.props.path}/${pageTitle}`);
+    let imgRef = database().ref(`${this.props.path}/${pageTitle}`);
     imgRef.on("value", snapshot =>
       this.setState({ uploadedImgs: saveObjValsInArr(snapshot.val()) })
     );
   }
 
   componentWillUnmount() {
+    const { database } = this.context.firebase;
     const pageTitle = this.props.pageTitle
       .split(" ")
       .join("-")
       .toLowerCase();
-    database.ref(`${this.props.path}/${pageTitle}`).off();
+    database()
+      .ref(`${this.props.path}/${pageTitle}`)
+      .off();
   }
 
-  handleChange(file) {
+  handleChange = file => {
+    const { database, storage } = this.context.firebase;
+
     this.setState({ fileSelected: true, fileName: file.name });
+
     const pageTitle = this.props.pageTitle
       .split(" ")
       .join("-")
       .toLowerCase();
-    let uploadTask = storage
+
+    let uploadTask = storage()
       .ref()
       .child(this.props.path)
       .child(pageTitle)
@@ -160,7 +179,7 @@ export default class ScavengerHunt extends Component {
         });
         uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
           this.setState({ imgURL: downloadURL });
-          let newImgKey = database
+          let newImgKey = database()
             .ref()
             .child(this.props.path)
             .child(pageTitle)
@@ -170,11 +189,13 @@ export default class ScavengerHunt extends Component {
             name: file.name,
             url: downloadURL
           };
-          database.ref().update(imgObject);
+          database()
+            .ref()
+            .update(imgObject);
         });
       }
     );
-  }
+  };
 
   render() {
     return (
@@ -256,12 +277,3 @@ const ImgArray = ({ imgs }) => (
     </Gallery>
   </div>
 );
-
-ScavengerHunt.propTypes = {
-  acf: PropTypes.shape({
-    content: PropTypes.string.isRequired
-  }),
-  layoutIndex: PropTypes.number.isRequired,
-  path: PropTypes.string.isRequired,
-  pageTitle: PropTypes.string.isRequired
-};
