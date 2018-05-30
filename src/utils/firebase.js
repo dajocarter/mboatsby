@@ -12,11 +12,13 @@ const config = {
   messagingSenderId: process.env.GATSBY_MESSAGING_SENDER_ID
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(config);
+class Firebase {
+  constructor() {
+    firebase.initializeApp(config);
+    this.storage = firebase.storage();
+    this.database = firebase.database();
+    this.auth = firebase.auth;
+  }
 }
 
-const storage = firebase.storage();
-const database = firebase.database();
-
-export { storage, database };
+export default new Firebase();
