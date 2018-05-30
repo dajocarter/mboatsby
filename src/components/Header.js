@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import Link from "gatsby-link";
 import styled from "styled-components";
 import { Navbar, Nav, NavDropdown, MenuItem } from "react-bootstrap";
-import SignInOut from "./SignInOut";
 
 const SiteHeader = styled(Navbar)`
   && {
@@ -14,6 +13,10 @@ const SiteHeader = styled(Navbar)`
 `;
 
 const NavItem = styled.li``;
+
+const Logout = styled(Navbar.Link)`
+  cursor: pointer;
+`;
 
 const Header = ({ title, menu, isAuthed, signIn, signOut }) => (
   <SiteHeader
@@ -45,10 +48,15 @@ const Header = ({ title, menu, isAuthed, signIn, signOut }) => (
             </NavItem>
           ))}
         </NavDropdown>
-        <SignInOut
-          onClick={() => (isAuthed ? signOut() : signIn("google"))}
-          text={isAuthed ? "Sign Out" : "Sign In"}
-        />
+        {isAuthed ? (
+          <NavItem>
+            <Logout onClick={signOut}>Logout</Logout>
+          </NavItem>
+        ) : (
+          <NavItem>
+            <Link to="/login/">Login</Link>
+          </NavItem>
+        )}
       </Nav>
     </Navbar.Collapse>
   </SiteHeader>
