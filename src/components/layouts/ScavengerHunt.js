@@ -187,6 +187,7 @@ export default class ScavengerHunt extends Component {
           const imgObject = {};
           imgObject[`${this.props.path}/${pageTitle}/${newImgKey}`] = {
             name: file.name,
+            uid: this.props.uid,
             url: downloadURL
           };
           database()
