@@ -250,31 +250,48 @@ export default class ScavengerHunt extends Component {
             </FormGroup>
           </form>
         </Col>
-        {this.state.uploadComplete &&
-          this.state.imgURL && (
-            <Col xs={12}>
-              {!!this.state.uploadedImgs.length && (
-                <ImgArray imgs={this.state.uploadedImgs} />
-              )}
-            </Col>
-          )}
+        {(this.props.uid ||
+          (this.state.uploadComplete && this.state.imgURL)) && (
+          <Col xs={12}>
+            {!!this.state.uploadedImgs.length && (
+              <ImgArray uid={this.props.uid} imgs={this.state.uploadedImgs} />
+            )}
+          </Col>
+        )}
       </Row>
     );
   }
 }
 
-const ImgArray = ({ imgs }) => (
-  <div>
-    <GalleryTitle>All Submissions to this Scavenger Hunt</GalleryTitle>
-    <Gallery>
-      {imgs.map((img, index) => (
-        <div key={index}>
-          <a href={img.url} target="_blank" rel="nofollow">
-            <UploadedImg src={img.url} />
+const ImgArray = ({ uid, imgs }) => {
+  const userImg = imgs.filter(img => img.uid === uid)[0];
+  const otherImgs = imgs.filter(img => img.uid !== uid);
+  return (
+    <div>
+      <GalleryTitle>Your Submission</GalleryTitle>
+      <Gallery>
+        <div>
+          <a href={userImg.href} target="_blank" rel="nofollow">
+            <UploadedImg src={userImg.url} />
           </a>
-          <p>{img.name}</p>
+          <p>{userImg.name}</p>
         </div>
-      ))}
-    </Gallery>
-  </div>
-);
+      </Gallery>
+      {otherImgs && (
+        <div>
+          <GalleryTitle>Other Submissions</GalleryTitle>
+          <Gallery>
+            {otherImgs.map((img, index) => (
+              <div key={index}>
+                <a href={img.url} target="_blank" rel="nofollow">
+                  <UploadedImg src={img.url} />
+                </a>
+                <p>{img.name}</p>
+              </div>
+            ))}
+          </Gallery>
+        </div>
+      )}
+    </div>
+  );
+};
