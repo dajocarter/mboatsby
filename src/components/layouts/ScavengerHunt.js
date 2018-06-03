@@ -345,15 +345,19 @@ const ImgArray = ({ uid, imgs }) => {
   const otherImgs = imgs.filter(img => img.uid !== uid);
   return (
     <div>
-      <GalleryTitle>Your Submission</GalleryTitle>
-      <Gallery>
+      {userImg && (
         <div>
-          <a href={userImg.href} target="_blank" rel="nofollow">
-            <UploadedImg src={userImg.url} />
-          </a>
-          <p>{userImg.name}</p>
+          <GalleryTitle>Your Submission</GalleryTitle>
+          <Gallery>
+            <div>
+              <a href={userImg.href} target="_blank" rel="nofollow">
+                <UploadedImg src={userImg.url} />
+              </a>
+              <p>{userImg.name}</p>
+            </div>
+          </Gallery>
         </div>
-      </Gallery>
+      )}
       {otherImgs && (
         <div>
           <GalleryTitle>Other Submissions</GalleryTitle>
