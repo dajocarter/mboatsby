@@ -234,7 +234,37 @@ export default class ScavengerHunt extends Component {
     );
   };
 
+  canBeSubmitted = () => {
+    const { fileSelected, uploadComplete } = this.state;
+    const { isAuthed } = this.props;
+
+    if (fileSelected) {
+      return false;
+    } else if (uploadComplete) {
+      return false;
+    } else if (!isAuthed) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  buttonText = () => {
+    const { fileSelected, uploadComplete } = this.state;
+
+    if (fileSelected) {
+      return `Uploading Screenshot...`;
+    } else if (uploadComplete) {
+      return `Upload Complete`;
+    } else {
+      return `Upload Screenshot`;
+    }
+  };
+
   render() {
+    const isEnabled = this.canBeSubmitted();
+    const buttonText = this.buttonText();
+
     return (
       <Row
         id={`layout-${this.props.layoutIndex}`}
@@ -257,31 +287,11 @@ export default class ScavengerHunt extends Component {
           <Col xs={12} sm={8} smOffset={2}>
             <form>
               <FormGroup controlId="fileUpload">
-                <UploadBtn
-                  className={`btn btn-block btn-primary`}
-                  disabled={
-                    this.state.fileSelected ||
-                    this.state.uploadComplete ||
-                    !this.props.isAuthed
-                  }
-                >
-                  {this.state.fileSelected
-                    ? `Uploading Screenshot...`
-                    : this.state.uploadComplete
-                      ? `Screenshot Uploaded`
-                      : `Upload Screenshot`}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple={false}
-                    disabled={
-                      this.state.fileSelected ||
-                      this.state.uploadComplete ||
-                      !this.props.isAuthed
-                    }
-                    onChange={event => this.handleChange(event.target.files[0])}
-                  />
-                </UploadBtn>
+                <UploadForm
+                  handleChange={this.handleChange}
+                  isEnabled={isEnabled}
+                  buttonText={buttonText}
+                />
                 <Instructions>
                   {this.state.fileSelected || this.state.uploadComplete ? (
                     <Status>
@@ -306,6 +316,21 @@ export default class ScavengerHunt extends Component {
     );
   }
 }
+
+const UploadForm = ({ handleChange, isEnabled, buttonText }) => {
+  return (
+    <UploadBtn className={`btn btn-block btn-primary`} disabled={!isEnabled}>
+      {buttonText}
+      <input
+        type="file"
+        accept="image/*"
+        multiple={false}
+        disabled={!isEnabled}
+        onChange={event => handleChange(event.target.files[0])}
+      />
+    </UploadBtn>
+  );
+};
 
 const ImgArray = ({ uid, imgs }) => {
   const userImg = imgs.filter(img => img.uid === uid)[0];
