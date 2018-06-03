@@ -36,6 +36,18 @@ export default class Auth extends Component {
     this.stopAuthListener();
   }
 
+  handleSignUp = (email, password) => {
+    const { auth } = this.context.firebase;
+
+    return auth()
+      .createUserWithEmailAndPassword(email, password)
+      .catch(error => {
+        console.log(error);
+        // TODO: notify the user of the error
+        return error;
+      });
+  };
+
   handleSignIn = (provider, email, password) => {
     const { auth } = this.context.firebase;
 
@@ -64,18 +76,6 @@ export default class Auth extends Component {
             // TODO: notify the user of the error
             return error;
           });
-      default:
-        const reason = "Invalid provider passed to signIn method";
-        console.error(reason);
-        return Promise.reject(reason);
-    }
-  };
-
-  handleSignOut = () => {
-    const { auth } = this.context.firebase;
-    return auth().signOut();
-  };
-
   signIn(user) {
     const { uid, isAnonymous, email, password, displayName } = user;
     this.setState({
@@ -91,12 +91,25 @@ export default class Auth extends Component {
     this.setState(INITIAL_STATE);
   }
 
+      default:
+        const reason = "Invalid provider passed to signIn method";
+        console.error(reason);
+        return Promise.reject(reason);
+    }
+  };
+
+  handleSignOut = () => {
+    const { auth } = this.context.firebase;
+    return auth().signOut();
+  };
+
   render() {
     const isAuthed = !!(this.state.uid && !this.state.isAnonymous);
     return this.props.children({
       ...this.state,
       signIn: this.handleSignIn,
       signOut: this.handleSignOut,
+      signUp: this.handleSignUp,
       isAuthed
     });
   }
