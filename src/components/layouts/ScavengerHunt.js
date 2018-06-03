@@ -131,33 +131,16 @@ export default class ScavengerHunt extends Component {
     imgRef.on("value", snapshot =>
       this.setState({ uploadedImgs: saveObjValsInArr(snapshot.val()) })
     );
+
+    this.hasUserSubmitted();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.isAuthed !== this.props.isAuthed) {
       // User just logged in or out
-      const { database } = this.context.firebase;
-      const { pageTitle, path, isAuthed, uid } = this.props;
-      if (isAuthed) {
-        // User just logged in
-        const titleOfPage = pageTitle
-          .split(" ")
-          .join("-")
-          .toLowerCase();
-        let uidRef = database().ref(`${path}/${titleOfPage}`);
-        // Determine if user has submitted an image
-        if (!!uid) {
-          uidRef
-            .orderByChild("uid")
-            .equalTo(uid)
-            .on("child_added", snapshot => {
-              if (snapshot.exists()) {
-                this.setState({ userSubmitted: true });
-              }
-            });
-        }
+      if (this.props.isAuthed) {
+        this.hasUserSubmitted();
       } else {
-        // User just logged out
         this.setState({ userSubmitted: false });
       }
     }
@@ -174,6 +157,30 @@ export default class ScavengerHunt extends Component {
       .ref(`${path}/${titleOfPage}`)
       .off();
   }
+
+  hasUserSubmitted = () => {
+    const { database } = this.context.firebase;
+    const { pageTitle, path, uid } = this.props;
+
+    const titleOfPage = pageTitle
+      .split(" ")
+      .join("-")
+      .toLowerCase();
+    let uidRef = database().ref(`${path}/${titleOfPage}`);
+
+    if (!!uid) {
+      uidRef
+        .orderByChild("uid")
+        .equalTo(uid)
+        .on("child_added", snapshot => {
+          if (snapshot.exists()) {
+            this.setState({ userSubmitted: true });
+          }
+        });
+    } else {
+      this.setState({ userSubmitted: false });
+    }
+  };
 
   handleChange = file => {
     const { database, storage } = this.context.firebase;
