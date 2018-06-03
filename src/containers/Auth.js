@@ -25,9 +25,15 @@ export default class Auth extends Component {
 
     this.stopAuthListener = auth().onAuthStateChanged(user => {
       if (user) {
-        this.signIn(user);
+        const { uid, isAnonymous, email, displayName } = user;
+        this.setState({
+          uid,
+          isAnonymous,
+          email,
+          displayName
+        });
       } else {
-        this.signOut();
+        this.setState(INITIAL_STATE);
       }
     });
   }
@@ -76,21 +82,6 @@ export default class Auth extends Component {
             // TODO: notify the user of the error
             return error;
           });
-  signIn(user) {
-    const { uid, isAnonymous, email, password, displayName } = user;
-    this.setState({
-      uid,
-      isAnonymous,
-      email,
-      password,
-      displayName
-    });
-  }
-
-  signOut() {
-    this.setState(INITIAL_STATE);
-  }
-
       default:
         const reason = "Invalid provider passed to signIn method";
         console.error(reason);
