@@ -118,11 +118,13 @@ export default class ScavengerHunt extends Component {
 
   componentDidMount() {
     const { database } = this.context.firebase;
-    const pageTitle = this.props.pageTitle
+    const { pageTitle, path, uid } = this.props;
+
+    const titleOfPage = pageTitle
       .split(" ")
       .join("-")
       .toLowerCase();
-    let imgRef = database().ref(`${this.props.path}/${pageTitle}`);
+    let imgRef = database().ref(`${path}/${titleOfPage}`);
     imgRef.on("value", snapshot =>
       this.setState({ uploadedImgs: saveObjValsInArr(snapshot.val()) })
     );
@@ -130,12 +132,13 @@ export default class ScavengerHunt extends Component {
 
   componentWillUnmount() {
     const { database } = this.context.firebase;
-    const pageTitle = this.props.pageTitle
+    const { pageTitle, path } = this.props;
+    const titleOfPage = pageTitle
       .split(" ")
       .join("-")
       .toLowerCase();
     database()
-      .ref(`${this.props.path}/${pageTitle}`)
+      .ref(`${path}/${titleOfPage}`)
       .off();
   }
 
