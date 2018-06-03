@@ -343,12 +343,7 @@ const ImgArray = ({ uid, imgs }) => {
         <div>
           <GalleryTitle>Your Submission</GalleryTitle>
           <Gallery>
-            <div>
-              <a href={userImg.href} target="_blank" rel="nofollow">
-                <UploadedImg src={userImg.url} />
-              </a>
-              <p>{userImg.name}</p>
-            </div>
+            <SubmittedImg url={userImg.url} name={userImg.name} />
           </Gallery>
         </div>
       )}
@@ -357,12 +352,7 @@ const ImgArray = ({ uid, imgs }) => {
           <GalleryTitle>Other Submissions</GalleryTitle>
           <Gallery>
             {otherImgs.map((img, index) => (
-              <div key={index}>
-                <a href={img.url} target="_blank" rel="nofollow">
-                  <UploadedImg src={img.url} />
-                </a>
-                <p>{img.name}</p>
-              </div>
+              <SubmittedImg key={index} url={img.url} name={img.name} />
             ))}
           </Gallery>
         </div>
@@ -370,3 +360,12 @@ const ImgArray = ({ uid, imgs }) => {
     </div>
   );
 };
+
+const SubmittedImg = ({ url, name }) => (
+  <div>
+    <a href={url} target="_blank" rel="nofollow">
+      <UploadedImg src={url} />
+    </a>
+    <p>{name}</p>
+  </div>
+);
