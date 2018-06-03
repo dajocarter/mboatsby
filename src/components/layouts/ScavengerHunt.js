@@ -97,7 +97,8 @@ const INITIAL_STATE = {
   progress: 0,
   uploadComplete: false,
   imgURL: "",
-  uploadedImgs: []
+  uploadedImgs: [],
+  userSubmitted: false
 };
 
 export default class ScavengerHunt extends Component {
@@ -111,7 +112,8 @@ export default class ScavengerHunt extends Component {
     }),
     layoutIndex: PropTypes.number.isRequired,
     path: PropTypes.string.isRequired,
-    pageTitle: PropTypes.string.isRequired
+    pageTitle: PropTypes.string.isRequired,
+    uid: PropTypes.string.isRequired
   };
 
   state = INITIAL_STATE;
@@ -128,6 +130,32 @@ export default class ScavengerHunt extends Component {
     imgRef.on("value", snapshot =>
       this.setState({ uploadedImgs: saveObjValsInArr(snapshot.val()) })
     );
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.uid !== prevProps.uid && prevProps.uid == "") {
+      const { database } = this.context.firebase;
+      const { pageTitle, path, uid } = this.props;
+
+      console.log(`My uid is ${uid}`);
+
+      const titleOfPage = pageTitle
+        .split(" ")
+        .join("-")
+        .toLowerCase();
+      let uidRef = database().ref(`${path}/${titleOfPage}`);
+      // Determine if user has submitted an image
+      if (!!uid) {
+        uidRef
+          .orderByChild("uid")
+          .equalTo(uid)
+          .on("child_added", snapshot => {
+            if (snapshot.exists()) {
+              this.setState({ userSubmitted: true });
+            }
+          });
+      }
+    }
   }
 
   componentWillUnmount() {
