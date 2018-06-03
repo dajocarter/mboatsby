@@ -25,9 +25,7 @@ const FormLinks = styled(FormControl.Static)`
 const INITIAL_STATE = { email: "", password: "", error: null };
 
 export default class LoginForm extends Component {
-  static contextTypes = {
-    firebase: PropTypes.object.isRequired
-  };
+  static contextTypes = { firebase: PropTypes.object.isRequired };
 
   static propTypes = {
     signIn: PropTypes.func.isRequired,
@@ -57,6 +55,19 @@ export default class LoginForm extends Component {
       })
       .catch(error => {
         console.error(error);
+        // TODO: notify user of the error
+      });
+  };
+
+  handleProvider = event => {
+    const { signIn, history } = this.props;
+    const provider = event.target.dataset.provider;
+    return signIn(provider)
+      .then(() => {
+        history.goBack();
+      })
+      .catch(error => {
+        console.log(error);
         // TODO: notify user of the error
       });
   };
@@ -94,6 +105,40 @@ export default class LoginForm extends Component {
         </Button>
 
         {error && <FormControl.Static>{error.message}</FormControl.Static>}
+
+        <hr />
+
+        <Button
+          block
+          bsStyle="primary"
+          type="button"
+          onClick={this.handleProvider}
+          data-provider="facebook"
+        >
+          Continue with Facebook
+        </Button>
+
+        <Button
+          block
+          bsStyle="danger"
+          type="button"
+          onClick={this.handleProvider}
+          data-provider="google"
+        >
+          Continue with Google
+        </Button>
+
+        <Button
+          block
+          bsStyle="info"
+          type="button"
+          onClick={this.handleProvider}
+          data-provider="twitter"
+        >
+          Continue with Twitter
+        </Button>
+
+        <hr />
 
         <FormLinks>
           Don't have an account? <Link to="/signup/">Create one</Link>

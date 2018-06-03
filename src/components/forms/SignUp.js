@@ -139,6 +139,8 @@ export default class SignUpForm extends Component {
           Continue with Twitter
         </Button>
 
+        <hr />
+
         <FormLinks>
           Already have an account? <Link to="/login/">Login</Link>
         </FormLinks>
