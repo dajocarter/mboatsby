@@ -113,14 +113,15 @@ export default class ScavengerHunt extends Component {
     layoutIndex: PropTypes.number.isRequired,
     path: PropTypes.string.isRequired,
     pageTitle: PropTypes.string.isRequired,
-    uid: PropTypes.string.isRequired
+    uid: PropTypes.string.isRequired,
+    isAuthed: PropTypes.bool.isRequired
   };
 
   state = INITIAL_STATE;
 
   componentDidMount() {
     const { database } = this.context.firebase;
-    const { pageTitle, path, uid } = this.props;
+    const { pageTitle, path } = this.props;
 
     const titleOfPage = pageTitle
       .split(" ")
@@ -133,27 +134,31 @@ export default class ScavengerHunt extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.uid !== prevProps.uid && prevProps.uid == "") {
+    if (prevProps.isAuthed !== this.props.isAuthed) {
+      // User just logged in or out
       const { database } = this.context.firebase;
-      const { pageTitle, path, uid } = this.props;
-
-      console.log(`My uid is ${uid}`);
-
-      const titleOfPage = pageTitle
-        .split(" ")
-        .join("-")
-        .toLowerCase();
-      let uidRef = database().ref(`${path}/${titleOfPage}`);
-      // Determine if user has submitted an image
-      if (!!uid) {
-        uidRef
-          .orderByChild("uid")
-          .equalTo(uid)
-          .on("child_added", snapshot => {
-            if (snapshot.exists()) {
-              this.setState({ userSubmitted: true });
-            }
-          });
+      const { pageTitle, path, isAuthed, uid } = this.props;
+      if (isAuthed) {
+        // User just logged in
+        const titleOfPage = pageTitle
+          .split(" ")
+          .join("-")
+          .toLowerCase();
+        let uidRef = database().ref(`${path}/${titleOfPage}`);
+        // Determine if user has submitted an image
+        if (!!uid) {
+          uidRef
+            .orderByChild("uid")
+            .equalTo(uid)
+            .on("child_added", snapshot => {
+              if (snapshot.exists()) {
+                this.setState({ userSubmitted: true });
+              }
+            });
+        }
+      } else {
+        // User just logged out
+        this.setState({ userSubmitted: false });
       }
     }
   }
@@ -255,7 +260,9 @@ export default class ScavengerHunt extends Component {
                 <UploadBtn
                   className={`btn btn-block btn-primary`}
                   disabled={
-                    this.state.fileSelected || this.state.uploadComplete
+                    this.state.fileSelected ||
+                    this.state.uploadComplete ||
+                    !this.props.isAuthed
                   }
                 >
                   {this.state.fileSelected
@@ -268,7 +275,9 @@ export default class ScavengerHunt extends Component {
                     accept="image/*"
                     multiple={false}
                     disabled={
-                      this.state.fileSelected || this.state.uploadComplete
+                      this.state.fileSelected ||
+                      this.state.uploadComplete ||
+                      !this.props.isAuthed
                     }
                     onChange={event => this.handleChange(event.target.files[0])}
                   />
@@ -283,8 +292,10 @@ export default class ScavengerHunt extends Component {
                         !this.state.uploadComplete && <Loading />}
                       {this.state.uploadComplete && <Checkmark />}
                     </Status>
-                  ) : (
+                  ) : this.props.isAuthed ? (
                     `Please include your initials in the filename, e.g., ABC.png`
+                  ) : (
+                    `Sign up or login to submit an image.`
                   )}
                 </Instructions>
               </FormGroup>
