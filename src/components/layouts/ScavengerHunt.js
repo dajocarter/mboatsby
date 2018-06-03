@@ -211,7 +211,8 @@ export default class ScavengerHunt extends Component {
           fileSelected: false,
           fileName: "",
           progress: 100,
-          uploadComplete: true
+          uploadComplete: true,
+          userSubmitted: true
         });
         uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
           this.setState({ imgURL: downloadURL });
