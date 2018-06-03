@@ -91,6 +91,12 @@ const saveObjValsInArr = object =>
         .reverse()
     : [];
 
+const hyphenate = str =>
+  str
+    .split(" ")
+    .join("-")
+    .toLowerCase();
+
 const INITIAL_STATE = {
   fileSelected: false,
   fileName: "",
@@ -122,11 +128,8 @@ export default class ScavengerHunt extends Component {
   componentDidMount() {
     const { database } = this.context.firebase;
     const { pageTitle, path } = this.props;
+    const titleOfPage = hyphenate(pageTitle);
 
-    const titleOfPage = pageTitle
-      .split(" ")
-      .join("-")
-      .toLowerCase();
     let imgRef = database().ref(`${path}/${titleOfPage}`);
     imgRef.on("value", snapshot =>
       this.setState({ uploadedImgs: saveObjValsInArr(snapshot.val()) })
@@ -149,10 +152,8 @@ export default class ScavengerHunt extends Component {
   componentWillUnmount() {
     const { database } = this.context.firebase;
     const { pageTitle, path } = this.props;
-    const titleOfPage = pageTitle
-      .split(" ")
-      .join("-")
-      .toLowerCase();
+    const titleOfPage = hyphenate(pageTitle);
+
     database()
       .ref(`${path}/${titleOfPage}`)
       .off();
@@ -161,14 +162,10 @@ export default class ScavengerHunt extends Component {
   hasUserSubmitted = () => {
     const { database } = this.context.firebase;
     const { pageTitle, path, uid } = this.props;
-
-    const titleOfPage = pageTitle
-      .split(" ")
-      .join("-")
-      .toLowerCase();
-    let uidRef = database().ref(`${path}/${titleOfPage}`);
+    const titleOfPage = hyphenate(pageTitle);
 
     if (!!uid) {
+      let uidRef = database().ref(`${path}/${titleOfPage}`);
       uidRef
         .orderByChild("uid")
         .equalTo(uid)
@@ -184,18 +181,15 @@ export default class ScavengerHunt extends Component {
 
   handleChange = file => {
     const { database, storage } = this.context.firebase;
+    const { pageTitle, path, uid } = this.props;
+    const titleOfPage = hyphenate(pageTitle);
 
     this.setState({ fileSelected: true, fileName: file.name });
 
-    const pageTitle = this.props.pageTitle
-      .split(" ")
-      .join("-")
-      .toLowerCase();
-
     let uploadTask = storage()
       .ref()
-      .child(this.props.path)
-      .child(pageTitle)
+      .child(path)
+      .child(titleOfPage)
       .child(file.name)
       .put(file);
 
@@ -225,13 +219,13 @@ export default class ScavengerHunt extends Component {
           this.setState({ imgURL: downloadURL });
           let newImgKey = database()
             .ref()
-            .child(this.props.path)
-            .child(pageTitle)
+            .child(path)
+            .child(titleOfPage)
             .push().key;
           const imgObject = {};
-          imgObject[`${this.props.path}/${pageTitle}/${newImgKey}`] = {
+          imgObject[`${path}/${titleOfPage}/${newImgKey}`] = {
             name: file.name,
-            uid: this.props.uid,
+            uid: uid,
             url: downloadURL
           };
           database()
