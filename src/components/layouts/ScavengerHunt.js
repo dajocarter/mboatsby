@@ -263,9 +263,28 @@ export default class ScavengerHunt extends Component {
     }
   };
 
+  instructionsText = () => {
+    const { fileSelected, uploadComplete, progress } = this.state;
+    const { isAuthed } = this.props;
+    return fileSelected || uploadComplete ? (
+      <Status>
+        <ProgressWell>
+          <ProgressBar progress={progress} />
+        </ProgressWell>
+        {fileSelected && !uploadComplete && <Loading />}
+        {uploadComplete && <Checkmark />}
+      </Status>
+    ) : isAuthed ? (
+      `Please include your initials in the filename, e.g., ABC.png`
+    ) : (
+      `Sign up or login to submit an image.`
+    );
+  };
+
   render() {
     const isEnabled = this.canBeSubmitted();
     const buttonText = this.buttonText();
+    const instructionsText = this.instructionsText();
 
     return (
       <Row
@@ -294,22 +313,7 @@ export default class ScavengerHunt extends Component {
                   isEnabled={isEnabled}
                   buttonText={buttonText}
                 />
-                <Instructions>
-                  {this.state.fileSelected || this.state.uploadComplete ? (
-                    <Status>
-                      <ProgressWell>
-                        <ProgressBar progress={this.state.progress} />
-                      </ProgressWell>
-                      {this.state.fileSelected &&
-                        !this.state.uploadComplete && <Loading />}
-                      {this.state.uploadComplete && <Checkmark />}
-                    </Status>
-                  ) : this.props.isAuthed ? (
-                    `Please include your initials in the filename, e.g., ABC.png`
-                  ) : (
-                    `Sign up or login to submit an image.`
-                  )}
-                </Instructions>
+                <Instructions>{instructionsText}</Instructions>
               </FormGroup>
             </form>
           </Col>
