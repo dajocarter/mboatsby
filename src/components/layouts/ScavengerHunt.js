@@ -242,51 +242,53 @@ export default class ScavengerHunt extends Component {
             dangerouslySetInnerHTML={{ __html: this.props.acf.content }}
           />
         )}
-        <Col xs={12} sm={8} smOffset={2}>
-          <form>
-            <FormGroup controlId="fileUpload">
-              <UploadBtn
-                className={`btn btn-block btn-primary`}
-                disabled={this.state.fileSelected || this.state.uploadComplete}
-              >
-                {this.state.fileSelected
-                  ? `Uploading Screenshot...`
-                  : this.state.uploadComplete
-                    ? `Screenshot Uploaded`
-                    : `Upload Screenshot`}
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple={false}
-                  disabled={
-                    this.state.fileSelected || this.state.uploadComplete
-                  }
-                  onChange={event => this.handleChange(event.target.files[0])}
-                />
-              </UploadBtn>
-              <Instructions>
-                {this.state.fileSelected || this.state.uploadComplete ? (
-                  <Status>
-                    <ProgressWell>
-                      <ProgressBar progress={this.state.progress} />
-                    </ProgressWell>
-                    {this.state.fileSelected &&
-                      !this.state.uploadComplete && <Loading />}
-                    {this.state.uploadComplete && <Checkmark />}
-                  </Status>
-                ) : (
-                  `Please include your initials in the filename, e.g., ABC.png`
-                )}
-              </Instructions>
-            </FormGroup>
-          </form>
-        </Col>
-        {(this.props.uid ||
-          (this.state.uploadComplete && this.state.imgURL)) && (
+        {this.state.userSubmitted ? (
           <Col xs={12}>
             {!!this.state.uploadedImgs.length && (
               <ImgArray uid={this.props.uid} imgs={this.state.uploadedImgs} />
             )}
+          </Col>
+        ) : (
+          <Col xs={12} sm={8} smOffset={2}>
+            <form>
+              <FormGroup controlId="fileUpload">
+                <UploadBtn
+                  className={`btn btn-block btn-primary`}
+                  disabled={
+                    this.state.fileSelected || this.state.uploadComplete
+                  }
+                >
+                  {this.state.fileSelected
+                    ? `Uploading Screenshot...`
+                    : this.state.uploadComplete
+                      ? `Screenshot Uploaded`
+                      : `Upload Screenshot`}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple={false}
+                    disabled={
+                      this.state.fileSelected || this.state.uploadComplete
+                    }
+                    onChange={event => this.handleChange(event.target.files[0])}
+                  />
+                </UploadBtn>
+                <Instructions>
+                  {this.state.fileSelected || this.state.uploadComplete ? (
+                    <Status>
+                      <ProgressWell>
+                        <ProgressBar progress={this.state.progress} />
+                      </ProgressWell>
+                      {this.state.fileSelected &&
+                        !this.state.uploadComplete && <Loading />}
+                      {this.state.uploadComplete && <Checkmark />}
+                    </Status>
+                  ) : (
+                    `Please include your initials in the filename, e.g., ABC.png`
+                  )}
+                </Instructions>
+              </FormGroup>
+            </form>
           </Col>
         )}
       </Row>
