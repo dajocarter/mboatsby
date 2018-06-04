@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 
 const INITIAL_STATE = {
   uid: "",
-  isAnonymous: null,
   email: "",
   password: "",
   displayName: ""
@@ -25,10 +24,9 @@ export default class Auth extends Component {
 
     this.stopAuthListener = auth().onAuthStateChanged(user => {
       if (user) {
-        const { uid, isAnonymous, email, displayName } = user;
+        const { uid, email, displayName } = user;
         this.setState({
           uid,
-          isAnonymous,
           email,
           displayName
         });
@@ -74,9 +72,7 @@ export default class Auth extends Component {
             // TODO: notify the user of the error
             return error;
           });
-      case "anonymous":
         return auth()
-          .signInAnonymously()
           .catch(error => {
             console.log(error);
             // TODO: notify the user of the error
@@ -95,7 +91,7 @@ export default class Auth extends Component {
   };
 
   render() {
-    const isAuthed = !!(this.state.uid && !this.state.isAnonymous);
+    const isAuthed = !!this.state.uid;
     return this.props.children({
       ...this.state,
       signIn: this.handleSignIn,
