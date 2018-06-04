@@ -52,37 +52,16 @@ export default class Auth extends Component {
       });
   };
 
-  handleSignIn = (provider, email, password) => {
+  handleSignIn = (email, password) => {
     const { auth } = this.context.firebase;
 
-    switch (provider) {
-      case "google":
-        return auth()
-          .signInWithPopup(new auth.GoogleAuthProvider())
-          .catch(error => {
-            console.log(error);
-            // TODO: notify the user of the error
-            return error;
-          });
-      case "email":
-        return auth()
-          .signInWithEmailAndPassword(email, password)
-          .catch(error => {
-            console.log(error);
-            // TODO: notify the user of the error
-            return error;
-          });
-        return auth()
-          .catch(error => {
-            console.log(error);
-            // TODO: notify the user of the error
-            return error;
-          });
-      default:
-        const reason = "Invalid provider passed to signIn method";
-        console.error(reason);
-        return Promise.reject(reason);
-    }
+    return auth()
+      .signInWithEmailAndPassword(email, password)
+      .catch(error => {
+        console.log(error);
+        // TODO: notify the user of the error
+        return error;
+      });
   };
 
   handleSignOut = () => {

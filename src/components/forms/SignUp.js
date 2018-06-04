@@ -60,19 +60,6 @@ export default class SignUpForm extends Component {
       });
   };
 
-  handleProvider = event => {
-    const { signIn, history } = this.props;
-    const provider = event.target.dataset.provider;
-    return signIn(provider)
-      .then(() => {
-        history.goBack();
-      })
-      .catch(error => {
-        console.log(error);
-        // TODO: notify user of the error
-      });
-  };
-
   render() {
     const { email, password, error } = this.state;
     return (
@@ -106,40 +93,6 @@ export default class SignUpForm extends Component {
         </Button>
 
         {error && <FormControl.Static>{error.message}</FormControl.Static>}
-
-        <hr />
-
-        <Button
-          block
-          bsStyle="primary"
-          type="button"
-          onClick={this.handleProvider}
-          data-provider="facebook"
-        >
-          Continue with Facebook
-        </Button>
-
-        <Button
-          block
-          bsStyle="danger"
-          type="button"
-          onClick={this.handleProvider}
-          data-provider="google"
-        >
-          Continue with Google
-        </Button>
-
-        <Button
-          block
-          bsStyle="info"
-          type="button"
-          onClick={this.handleProvider}
-          data-provider="twitter"
-        >
-          Continue with Twitter
-        </Button>
-
-        <hr />
 
         <FormLinks>
           Already have an account? <Link to="/login/">Login</Link>

@@ -48,26 +48,13 @@ export default class LoginForm extends Component {
 
     event.preventDefault();
 
-    return signIn("email", email, password)
+    return signIn(email, password)
       .then(() => {
         this.setState(INITIAL_STATE);
         history.goBack();
       })
       .catch(error => {
         console.error(error);
-        // TODO: notify user of the error
-      });
-  };
-
-  handleProvider = event => {
-    const { signIn, history } = this.props;
-    const provider = event.target.dataset.provider;
-    return signIn(provider)
-      .then(() => {
-        history.goBack();
-      })
-      .catch(error => {
-        console.log(error);
         // TODO: notify user of the error
       });
   };
@@ -105,40 +92,6 @@ export default class LoginForm extends Component {
         </Button>
 
         {error && <FormControl.Static>{error.message}</FormControl.Static>}
-
-        <hr />
-
-        <Button
-          block
-          bsStyle="primary"
-          type="button"
-          onClick={this.handleProvider}
-          data-provider="facebook"
-        >
-          Continue with Facebook
-        </Button>
-
-        <Button
-          block
-          bsStyle="danger"
-          type="button"
-          onClick={this.handleProvider}
-          data-provider="google"
-        >
-          Continue with Google
-        </Button>
-
-        <Button
-          block
-          bsStyle="info"
-          type="button"
-          onClick={this.handleProvider}
-          data-provider="twitter"
-        >
-          Continue with Twitter
-        </Button>
-
-        <hr />
 
         <FormLinks>
           Don't have an account? <Link to="/signup/">Create one</Link>
