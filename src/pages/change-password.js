@@ -1,13 +1,13 @@
 import React from "react";
-import SignUpForm from "../components/forms/SignUp";
+import ChangePasswordForm from "../components/forms/ChangePassword";
 import { Grid, Row, Col } from "react-bootstrap";
 
-const ChangePasswordPage = ({ location, signUp, signIn }) => {
+const ChangePasswordPage = ({ changePassword }) => {
   return (
     <Grid>
       <Row>
         <Col xs={12} sm={6} smOffset={3}>
-          <SignUpForm location={location} signUp={signUp} signIn={signIn} />
+          <ChangePasswordForm changePassword={changePassword} />
         </Col>
       </Row>
     </Grid>

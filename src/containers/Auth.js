@@ -81,6 +81,18 @@ export default class Auth extends Component {
       });
   };
 
+  handlePasswordChange = password => {
+    const { auth } = this.context.firebase;
+
+    return auth()
+      .currentUser.updatePassword(password)
+      .catch(error => {
+        console.log(error);
+        // TODO: notify the user of the error
+        return error;
+      });
+  };
+
   render() {
     const isAuthed = !!this.state.uid;
     return this.props.children({
@@ -89,6 +101,7 @@ export default class Auth extends Component {
       signOut: this.handleSignOut,
       signUp: this.handleSignUp,
       resetPassword: this.handlePasswordReset,
+      changePassword: this.handlePasswordChange,
       isAuthed
     });
   }
