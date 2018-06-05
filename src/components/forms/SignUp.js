@@ -25,8 +25,6 @@ const FormLinks = styled(FormControl.Static)`
 const INITIAL_STATE = { email: "", password: "", error: null };
 
 export default class SignUpForm extends Component {
-  static contextTypes = { firebase: PropTypes.object.isRequired };
-
   static propTypes = {
     signUp: PropTypes.func.isRequired,
     location: PropTypes.object.isRequired
