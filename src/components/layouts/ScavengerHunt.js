@@ -69,7 +69,7 @@ const GalleryTitle = styled.h4`
   text-align: center;
 `;
 
-const Gallery = styled.div`
+const GalleryImgs = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
@@ -339,31 +339,26 @@ const UploadForm = ({ handleChange, isEnabled, buttonText }) => {
 };
 
 const ImgArray = ({ uid, imgs }) => {
-  const userImg = imgs.filter(img => img.uid === uid)[0];
+  const userImgs = imgs.filter(img => img.uid === uid);
   const otherImgs = imgs.filter(img => img.uid !== uid);
   return (
     <div>
-      {userImg && (
-        <div>
-          <GalleryTitle>Your Submission</GalleryTitle>
-          <Gallery>
-            <SubmittedImg url={userImg.url} name={userImg.name} />
-          </Gallery>
-        </div>
-      )}
-      {otherImgs && (
-        <div>
-          <GalleryTitle>Other Submissions</GalleryTitle>
-          <Gallery>
-            {otherImgs.map((img, index) => (
-              <SubmittedImg key={index} url={img.url} name={img.name} />
-            ))}
-          </Gallery>
-        </div>
-      )}
+      {userImg && <Gallery title="Your Submission" imgs={userImgs} />}
+      {otherImgs && <Gallery title="Other Submissions" imgs={otherImgs} />}
     </div>
   );
 };
+
+const Gallery = ({ title, imgs }) => (
+  <div>
+    <GalleryTitle>{title}</GalleryTitle>
+    <GalleryImgs>
+      {imgs.map((img, index) => (
+        <SubmittedImg key={index} url={img.url} name={img.name} />
+      ))}
+    </GalleryImgs>
+  </div>
+);
 
 const SubmittedImg = ({ url, name }) => (
   <div>
