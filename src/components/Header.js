@@ -36,7 +36,7 @@ const Header = ({ title, menu, isAuthed, signIn, signOut }) => (
       <Nav pullRight role={`navigation`}>
         <NavDropdown eventKey={1} title="Cases" id="menu-dropdown">
           {menu.map((item, index) => (
-            <NavItem key={item.wordpress_id} role={`presentation`}>
+            <NavItem key={index} role={`presentation`}>
               <Link
                 to={`/${item.case_slug}/${item.object_slug}`}
                 activeClassName={`active`}
