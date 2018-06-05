@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Link from "gatsby-link";
+import Link, { navigateTo } from "gatsby-link";
 import { FormGroup, FormControl, Button } from "react-bootstrap";
 import styled from "styled-components";
 
@@ -29,8 +29,7 @@ export default class SignUpForm extends Component {
 
   static propTypes = {
     signUp: PropTypes.func.isRequired,
-    signIn: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired
   };
 
   state = INITIAL_STATE;
@@ -44,7 +43,7 @@ export default class SignUpForm extends Component {
   };
 
   handleSubmit = event => {
-    const { signUp, history } = this.props;
+    const { signUp, location } = this.props;
     const { email, password } = this.state;
 
     event.preventDefault();
@@ -52,7 +51,8 @@ export default class SignUpForm extends Component {
     return signUp(email, password)
       .then(() => {
         this.setState(INITIAL_STATE);
-        history.goBack();
+        const path = location.search ? location.search.split("=")[1] : "/";
+        navigateTo(path);
       })
       .catch(error => {
         console.error(error);

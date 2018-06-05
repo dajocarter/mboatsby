@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Link from "gatsby-link";
+import Link, { navigateTo } from "gatsby-link";
 import { FormGroup, FormControl, Button } from "react-bootstrap";
 import styled from "styled-components";
 
@@ -29,7 +29,7 @@ export default class LoginForm extends Component {
 
   static propTypes = {
     signIn: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired
   };
 
   state = INITIAL_STATE;
@@ -43,7 +43,7 @@ export default class LoginForm extends Component {
   };
 
   handleSubmit = event => {
-    const { history, signIn } = this.props;
+    const { location, signIn } = this.props;
     const { email, password } = this.state;
 
     event.preventDefault();
@@ -51,7 +51,8 @@ export default class LoginForm extends Component {
     return signIn(email, password)
       .then(() => {
         this.setState(INITIAL_STATE);
-        history.goBack();
+        const path = location.search ? location.search.split("=")[1] : "/";
+        navigateTo(path);
       })
       .catch(error => {
         console.error(error);
@@ -60,6 +61,7 @@ export default class LoginForm extends Component {
   };
 
   render() {
+    const { location } = this.props;
     const { email, password, error } = this.state;
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -94,7 +96,8 @@ export default class LoginForm extends Component {
         {error && <FormControl.Static>{error.message}</FormControl.Static>}
 
         <FormLinks>
-          Don't have an account? <Link to="/signup/">Create one</Link>
+          Don't have an account?{" "}
+          <Link to={`/signup/${location.search}`}>Create one</Link>
         </FormLinks>
         <FormLinks>
           Forgot your password? <Link to="/reset-password/">Reset it</Link>

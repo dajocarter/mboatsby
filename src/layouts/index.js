@@ -31,7 +31,7 @@ export default class TemplateWrapper extends Component {
   };
 
   render() {
-    const { data, children } = this.props;
+    const { data, children, location } = this.props;
     const menuItems = this.createMenuItems();
     return (
       <Auth>
@@ -48,6 +48,7 @@ export default class TemplateWrapper extends Component {
               <Header
                 title={data.site.siteMetadata.title}
                 menu={menuItems}
+                location={location}
                 {...auth}
               />
               <main>{children({ ...this.props, ...auth })}</main>

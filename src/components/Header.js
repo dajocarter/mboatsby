@@ -18,7 +18,7 @@ const Logout = styled(Navbar.Link)`
   cursor: pointer;
 `;
 
-const Header = ({ title, menu, isAuthed, signIn, signOut }) => (
+const Header = ({ location, title, menu, isAuthed, signIn, signOut }) => (
   <SiteHeader
     inverse
     fixedTop
@@ -54,7 +54,7 @@ const Header = ({ title, menu, isAuthed, signIn, signOut }) => (
           </NavItem>
         ) : (
           <NavItem>
-            <Link to="/login/">Login</Link>
+            <Link to={`/login/?ref=${location.pathname}`}>Login</Link>
           </NavItem>
         )}
       </Nav>
