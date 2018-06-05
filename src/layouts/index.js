@@ -15,8 +15,24 @@ export default class TemplateWrapper extends Component {
     data: PropTypes.object.isRequired
   };
 
+  createMenuItems = () => {
+    const { menu, cases, categories } = this.props.data;
+    const menuItems = menu.items.map(item => {
+      const { title, object_slug, object_id } = item;
+      const menuCase = cases.edges.filter(
+        ({ node }) => node.wordpress_id === object_id
+      )[0].node;
+      const cat = categories.edges.filter(
+        ({ node }) => node.wordpress_id === menuCase.categories[0]
+      )[0].node;
+      return { title, object_slug, case_slug: cat.slug };
+    });
+    return menuItems;
+  };
+
   render() {
     const { data, children } = this.props;
+    const menuItems = this.createMenuItems();
     return (
       <Auth>
         {auth => {
@@ -31,7 +47,7 @@ export default class TemplateWrapper extends Component {
               />
               <Header
                 title={data.site.siteMetadata.title}
-                menu={data.menu.items}
+                menu={menuItems}
                 {...auth}
               />
               <main>{children({ ...this.props, ...auth })}</main>
@@ -58,9 +74,25 @@ export const indexQuery = graphql`
     }
     menu: wordpressWpApiMenusMenusItems(wordpress_id: { eq: 5 }) {
       items {
-        wordpress_id
+        object_id
         title
         object_slug
+      }
+    }
+    cases: allWordpressWpCases {
+      edges {
+        node {
+          wordpress_id
+          categories
+        }
+      }
+    }
+    categories: allWordpressCategory {
+      edges {
+        node {
+          wordpress_id
+          slug
+        }
       }
     }
   }

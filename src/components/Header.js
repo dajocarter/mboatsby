@@ -38,7 +38,7 @@ const Header = ({ title, menu, isAuthed, signIn, signOut }) => (
           {menu.map((item, index) => (
             <NavItem key={item.wordpress_id} role={`presentation`}>
               <Link
-                to={`/${item.object_slug}`}
+                to={`/${item.case_slug}/${item.object_slug}`}
                 activeClassName={`active`}
                 role={`menuitem`}
                 tabIndex={-1}
@@ -70,7 +70,7 @@ Header.propTypes = {
     PropTypes.shape({
       object_slug: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      wordpress_id: PropTypes.number.isRequired
+      case_slug: PropTypes.string.isRequired
     })
   ),
   signIn: PropTypes.func.isRequired,
