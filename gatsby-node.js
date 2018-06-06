@@ -50,27 +50,21 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
         result.data.pages.edges.forEach(edge => {
           const slug = edge.node.slug;
           if (edge.node.status === `publish`) {
+            let path = edge.node.slug;
             if (edge.node.wordpress_parent) {
               const parentID = edge.node.wordpress_parent;
               const parent = result.data.pages.edges.filter(
                 ({ node }) => node.wordpress_id === parentID
               )[0];
-              createPage({
-                path: `${parent.node.slug}/${edge.node.slug}`,
-                component: pageTemplate,
-                context: {
-                  id: edge.node.id
-                }
-              });
-            } else {
-              createPage({
-                path: edge.node.slug,
-                component: pageTemplate,
-                context: {
-                  id: edge.node.id
-                }
-              });
+              path = `${parent.node.slug}/${edge.node.slug}`;
             }
+            createPage({
+              path,
+              component: pageTemplate,
+              context: {
+                id: edge.node.id
+              }
+            });
           }
         });
 
