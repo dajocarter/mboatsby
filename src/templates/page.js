@@ -1,11 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
+import DefaultPage from "./page-default";
 
-const PageTemplate = props => (
-  <div>
-    <h1>{props.data.page.title}</h1>
-    <div dangerouslySetInnerHTML={{ __html: props.data.page.content }} />
-  </div>
+const PageTemplate = ({
+  data: {
+    page: { title, content }
+  }
+}) => (
+  <DefaultPage
+    content={() => (
+      <div>
+        <h1>{title}</h1>
+        <div dangerouslySetInnerHTML={{ __html: content }} />
+      </div>
+    )}
+  />
 );
 
 export default PageTemplate;
@@ -15,11 +24,6 @@ export const pageQuery = graphql`
     page: wordpressPage(id: { eq: $id }) {
       title
       content
-    }
-    site {
-      siteMetadata {
-        title
-      }
     }
   }
 `;
