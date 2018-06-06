@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+
 import DefaultPage from "./page-default";
 
 const PageTemplate = ({
@@ -18,6 +19,15 @@ const PageTemplate = ({
 );
 
 export default PageTemplate;
+
+PageTemplate.propTypes = {
+  data: PropTypes.shape({
+    page: PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      content: PropTypes.string
+    }).isRequired
+  }).isRequired
+};
 
 export const pageQuery = graphql`
   query currentPageQuery($id: String!) {
