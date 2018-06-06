@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { func } from "prop-types";
 import Link, { navigateTo } from "gatsby-link";
 import { FormGroup, FormControl, Button } from "react-bootstrap";
 import styled from "styled-components";
@@ -26,7 +26,7 @@ const INITIAL_STATE = { password: "", error: null };
 
 export default class ChangePasswordForm extends Component {
   static propTypes = {
-    changePassword: PropTypes.func.isRequired
+    changePassword: func.isRequired
   };
 
   state = INITIAL_STATE;

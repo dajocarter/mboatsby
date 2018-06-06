@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes, { number } from "prop-types";
+import { shape, arrayOf, number, string, object } from "prop-types";
 import Link from "gatsby-link";
 import styled from "styled-components";
 import { Row, Col } from "react-bootstrap";
@@ -11,18 +11,14 @@ const ButtonLink = styled(Link)`
   margin-right: auto;
 `;
 
-const Links = props => (
-  <Row id={`layout-${props.layoutIndex}`} className={props.layoutName}>
-    {props.acf.links &&
-      props.acf.links.map((button, index) => (
-        <Col
-          key={index}
-          xs={12}
-          sm={columnClasses(index, props.acf.links.length)}
-        >
+const Links = ({ layoutIndex, layoutName, path, acf: { links } }) => (
+  <Row id={`layout-${layoutIndex}`} className={layoutName}>
+    {links &&
+      links.map((button, index) => (
+        <Col key={index} xs={12} sm={columnClasses(index, links.length)}>
           <ButtonLink
             className={`btn btn-primary btn-block`}
-            to={`/${props.path}/${button.page.post_name}`}
+            to={`/${path}/${button.page.post_name}`}
           >
             {button.text}
           </ButtonLink>
@@ -34,5 +30,16 @@ const Links = props => (
 export default Links;
 
 Links.propTypes = {
-  layoutIndex: PropTypes.number.isRequired
+  layoutIndex: number.isRequired,
+  layoutName: string.isRequired,
+  acf: shape({
+    links: arrayOf(
+      shape({
+        page: shape({
+          post_name: string.isRequired
+        }),
+        text: string.isRequired
+      })
+    )
+  })
 };

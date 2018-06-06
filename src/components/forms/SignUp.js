@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { object, func } from "prop-types";
 import Link, { navigateTo } from "gatsby-link";
 import { FormGroup, FormControl, Button } from "react-bootstrap";
 import styled from "styled-components";
@@ -26,8 +26,8 @@ const INITIAL_STATE = { email: "", password: "", error: null };
 
 export default class SignUpForm extends Component {
   static propTypes = {
-    signUp: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired
+    signUp: func.isRequired,
+    location: object.isRequired
   };
 
   state = INITIAL_STATE;

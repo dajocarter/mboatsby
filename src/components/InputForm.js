@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { shape, arrayOf, number, string } from "prop-types";
 import styled from "styled-components";
 import {
   FormGroup,
@@ -18,20 +18,31 @@ const Form = styled(FormGroup)`
 `;
 
 export default class InputForm extends Component {
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      value: ``,
-      validation: null,
-      glyphicon: props.input.hint ? `question-sign` : ``,
-      show: false
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-  }
+  static propTypes = {
+    inputIndex: number.isRequired,
+    layoutIndex: number.isRequired,
+    input: shape({
+      label: string,
+      answers: arrayOf(
+        shape({
+          possibility: string.isRequired
+        })
+      ).isRequired,
+      hint: string
+    })
+  };
 
-  handleChange(event) {
-    const possibilities = this.props.input.answers.map(({ possibility }) =>
+  state = {
+    value: ``,
+    validation: null,
+    glyphicon: this.props.input.hint ? `question-sign` : ``,
+    show: false
+  };
+
+  handleChange = event => {
+    const { input } = this.props;
+
+    const possibilities = input.answers.map(({ possibility }) =>
       possibility.toLowerCase()
     );
     const valueIsCorrect = possibilities.includes(
@@ -40,61 +51,64 @@ export default class InputForm extends Component {
     const validation = valueIsCorrect ? `success` : `error`;
     const glyphicon = valueIsCorrect
       ? `ok-sign`
-      : this.props.input.hint ? `question-sign` : `remove-sign`;
+      : input.hint
+        ? `question-sign`
+        : `remove-sign`;
+
     this.setState({
       value: event.target.value,
       validation: validation,
       glyphicon: glyphicon
     });
-  }
+  };
 
-  handleClick(event) {
+  handleClick = event => {
     this.setState({ target: event.target, show: !this.state.show });
-  }
+  };
 
   render() {
+    const { validation, value, glyphicon, show, target } = this.state;
+    const {
+      inputIndex,
+      layoutIndex,
+      layoutName,
+      input: { label, answers, hint }
+    } = this.props;
+
     return (
-      <Form validationState={this.state.validation}>
-        {this.props.input.label && (
-          <ControlLabel
-            htmlFor={`input-${this.props.layoutIndex}-${this.props.inputIndex}`}
-          >
-            {this.props.input.label}
+      <Form validationState={validation}>
+        {label && (
+          <ControlLabel htmlFor={`input-${layoutIndex}-${inputIndex}`}>
+            {label}
           </ControlLabel>
         )}
         <InputGroup>
           <FormControl
             type={`text`}
-            id={`input-${this.props.layoutIndex}-${this.props.inputIndex}`}
-            value={this.state.value}
+            id={`input-${layoutIndex}-${inputIndex}`}
+            value={value}
             onChange={this.handleChange}
           />
           <InputGroup.Addon>
             <Glyphicon
-              glyph={this.state.glyphicon}
-              onClick={this.props.input.hint ? this.handleClick : null}
+              glyph={glyphicon}
+              onClick={hint ? this.handleClick : null}
             />
           </InputGroup.Addon>
         </InputGroup>
-        {this.props.input.hint && (
+        {hint && (
           <Overlay
-            show={this.state.show}
-            target={this.state.target}
+            show={show}
+            target={target}
             placement={`top`}
             container={this}
             containerPadding={0}
           >
             <Popover
-              id={`hint-${this.props.layoutIndex}-${this.props.inputIndex}`}
-              title={
-                this.props.input.label
-                  ? `Hint for ${this.props.input.label}`
-                  : `Hint`
-              }
+              id={`hint-${layoutIndex}-${inputIndex}`}
+              title={label ? `Hint for ${label}` : `Hint`}
             >
-              <div
-                dangerouslySetInnerHTML={{ __html: this.props.input.hint }}
-              />
+              <div dangerouslySetInnerHTML={{ __html: hint }} />
             </Popover>
           </Overlay>
         )}

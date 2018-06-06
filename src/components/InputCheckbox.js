@@ -1,34 +1,40 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { bool, string } from "prop-types";
 import { Checkbox } from "react-bootstrap";
 
 export default class InputCheckbox extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      checked: false,
-      validation: null
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
+  static propTypes = {
+    isCorrect: bool.isRequired,
+    label: string.isRequired
+  };
 
-  handleChange() {
+  state = {
+    checked: false,
+    validation: null
+  };
+
+  handleChange = () => {
     this.setState((prevState, props) => ({
       checked: !prevState.checked,
       validation: prevState.checked
         ? null
-        : props.isCorrect ? `success` : `error`
+        : props.isCorrect
+          ? `success`
+          : `error`
     }));
-  }
+  };
 
   render() {
+    const { checked, validation } = this.state;
+    const { label } = this.props;
+
     return (
       <Checkbox
-        checked={this.state.checked}
-        validationState={this.state.validation}
+        checked={checked}
+        validationState={validation}
         onChange={this.handleChange}
       >
-        {this.props.label}
+        {label}
       </Checkbox>
     );
   }

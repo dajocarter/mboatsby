@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { object, func } from "prop-types";
 import Link, { navigateTo } from "gatsby-link";
 import { FormGroup, FormControl, Button } from "react-bootstrap";
 import styled from "styled-components";
@@ -25,11 +25,9 @@ const FormLinks = styled(FormControl.Static)`
 const INITIAL_STATE = { email: "", password: "", error: null };
 
 export default class LoginForm extends Component {
-  static contextTypes = { firebase: PropTypes.object.isRequired };
-
   static propTypes = {
-    signIn: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired
+    signIn: func.isRequired,
+    location: object.isRequired
   };
 
   state = INITIAL_STATE;

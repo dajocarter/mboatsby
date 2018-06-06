@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { shape, string } from "prop-types";
 import Link from "gatsby-link";
 import styled from "styled-components";
 import { Grid, Row, Col, NavbarBrand } from "react-bootstrap";
@@ -39,14 +39,14 @@ const NetlifyImg = styled.img`
   max-width: 100%;
 `;
 
-const Footer = props => (
+const Footer = ({ siteMetadata }) => (
   <SiteFooter>
     <FooterContainer>
       <Row>
         <Col xs={12}>
           <NavbarBrand>
             <FooterSiteTitle>
-              <Link to={`/`}>{props.siteMetadata.title}</Link>
+              <Link to={`/`}>{siteMetadata.title}</Link>
             </FooterSiteTitle>
           </NavbarBrand>
         </Col>
@@ -54,16 +54,16 @@ const Footer = props => (
       <Row>
         <Col xs={12} sm={4}>
           <AuthorContactList>
-            <li>{props.siteMetadata.author.name}</li>
+            <li>{siteMetadata.author.name}</li>
             <li>
-              <Link to={`mailto:${props.siteMetadata.author.email}`}>
-                {props.siteMetadata.author.email}
+              <Link to={`mailto:${siteMetadata.author.email}`}>
+                {siteMetadata.author.email}
               </Link>
             </li>
           </AuthorContactList>
         </Col>
         <Col xs={12} sm={6} smOffset={2}>
-          <p>{props.siteMetadata.description}</p>
+          <p>{siteMetadata.description}</p>
         </Col>
         <Col xs={12}>
           <a href={`//www.netlify.com`} target={`_blank`}>
@@ -81,12 +81,12 @@ const Footer = props => (
 export default Footer;
 
 Footer.propTypes = {
-  siteMetadata: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    author: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired
+  siteMetadata: shape({
+    title: string.isRequired,
+    description: string.isRequired,
+    author: shape({
+      name: string.isRequired,
+      email: string.isRequired
     })
   })
 };

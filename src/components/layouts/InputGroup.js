@@ -1,7 +1,8 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { number, string, object } from "prop-types";
 import styled from "styled-components";
 import { Row, Col, Checkbox, Radio } from "react-bootstrap";
+
 import InputCheckbox from "../InputCheckbox";
 import InputRadio from "../InputRadio";
 
@@ -11,15 +12,19 @@ const Group = styled.div`
   margin-right: auto;
 `;
 
-const InputGroup = props => (
-  <Row id={`layout-${props.layoutIndex}`} className={props.layoutName}>
+const InputGroup = ({
+  layoutIndex,
+  layoutName,
+  acf: { input_type, options }
+}) => (
+  <Row id={`layout-${layoutIndex}`} className={layoutName}>
     <Col xs={12}>
       <Group>
         {(() => {
-          switch (props.acf.input_type) {
+          switch (input_type) {
             case "checkbox":
               return (() =>
-                props.acf.options.map((option, index) => (
+                options.map((option, index) => (
                   <InputCheckbox
                     key={index}
                     isCorrect={option.is_correct}
@@ -29,12 +34,12 @@ const InputGroup = props => (
               break;
             case "radio":
               return (() =>
-                props.acf.options.map((option, index) => (
+                options.map((option, index) => (
                   <InputRadio
                     key={index}
                     isCorrect={option.is_correct}
                     label={option.text}
-                    name={`layout-${props.layoutIndex}`}
+                    name={`layout-${layoutIndex}`}
                   />
                 )))();
               break;
@@ -47,4 +52,8 @@ const InputGroup = props => (
 
 export default InputGroup;
 
-InputGroup.propTypes = {};
+InputGroup.propTypes = {
+  layoutIndex: number.isRequired,
+  layoutName: string.isRequired,
+  acf: object.isRequired
+};
