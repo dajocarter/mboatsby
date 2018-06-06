@@ -1,4 +1,5 @@
 import React from "react";
+
 import DefaultPage from "../templates/page-default";
 
 const NotFoundPage = () => (

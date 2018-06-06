@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { shape, string } from "prop-types";
 
 import DefaultPage from "./page-default";
 
@@ -27,10 +27,10 @@ const PageTemplate = ({
 export default PageTemplate;
 
 PageTemplate.propTypes = {
-  data: PropTypes.shape({
-    page: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      content: PropTypes.string
+  data: shape({
+    page: shape({
+      title: string.isRequired,
+      content: string
     }).isRequired
   }).isRequired
 };

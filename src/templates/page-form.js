@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { func } from "prop-types";
 import { Grid, Row, Col } from "react-bootstrap";
 
 const FormPage = ({ form }) => {
@@ -15,7 +15,7 @@ const FormPage = ({ form }) => {
 };
 
 FormPage.propTypes = {
-  form: PropTypes.func.isRequired
+  form: func.isRequired
 };
 
 export default FormPage;

@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { shape, object, bool, string } from "prop-types";
 import Img from "gatsby-image";
 import { Grid } from "react-bootstrap";
 import styled from "styled-components";
@@ -57,12 +57,16 @@ const TagTitle = styled.h2`
   padding: 1rem 0;
 `;
 
-const CaseTemplate = ({ data, isAuthed, uid }) => {
-  const category = data.categories.edges.filter(
-    ({ node }) => node.wordpress_id === data.case.categories[0]
+const CaseTemplate = ({
+  data: { wpCase, categories, tags },
+  isAuthed,
+  uid
+}) => {
+  const category = categories.edges.filter(
+    ({ node }) => node.wordpress_id === wpCase.categories[0]
   )[0].node;
-  const tag = data.tags.edges.filter(
-    ({ node }) => node.wordpress_id === data.case.tags[0]
+  const tag = tags.edges.filter(
+    ({ node }) => node.wordpress_id === wpCase.tags[0]
   )[0].node;
   return (
     <Template>
@@ -78,8 +82,8 @@ const CaseTemplate = ({ data, isAuthed, uid }) => {
         </Grid>
       </BreadcrumbBar>
       <Grid>
-        {data.case.acf.layouts_case &&
-          data.case.acf.layouts_case.map((acf_type, index) => {
+        {wpCase.acf.layouts_case &&
+          wpCase.acf.layouts_case.map((acf_type, index) => {
             switch (acf_type.__typename) {
               case "WordPressAcf_check_your_answer":
                 return (
@@ -139,7 +143,7 @@ const CaseTemplate = ({ data, isAuthed, uid }) => {
                     layoutName={acf_type.__typename}
                     layoutIndex={index}
                     path={category.slug}
-                    pageTitle={data.case.title}
+                    pageTitle={wpCase.title}
                     acf={acf_type}
                     isAuthed={isAuthed}
                     uid={uid}
@@ -155,9 +159,19 @@ const CaseTemplate = ({ data, isAuthed, uid }) => {
 
 export default CaseTemplate;
 
+CaseTemplate.propTypes = {
+  data: shape({
+    wpCase: object.isRequired,
+    categories: object.isRequired,
+    tags: object.isRequired
+  }).isRequired,
+  isAuthed: bool.isRequired,
+  uid: string.isRequired
+};
+
 export const caseQuery = graphql`
   query currentCaseQuery($id: String!) {
-    case: wordpressWpCases(id: { eq: $id }) {
+    wpCase: wordpressWpCases(id: { eq: $id }) {
       title
       categories
       tags

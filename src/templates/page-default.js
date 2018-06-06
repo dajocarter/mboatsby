@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { func } from "prop-types";
 import { Grid, Row, Col } from "react-bootstrap";
 
 const DefaultPage = ({ content }) => {
@@ -13,7 +13,7 @@ const DefaultPage = ({ content }) => {
 };
 
 DefaultPage.propTypes = {
-  content: PropTypes.func.isRequired
+  content: func.isRequired
 };
 
 export default DefaultPage;

@@ -1,18 +1,61 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { shape, arrayOf, string, number, func, object } from "prop-types";
 import Link from "gatsby-link";
 import Helmet from "react-helmet";
+
 import Auth from "../containers/Auth";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/css/bootstrap-theme.css";
 import "./index.scss";
 
 export default class TemplateWrapper extends Component {
   static propTypes = {
-    children: PropTypes.func,
-    data: PropTypes.object.isRequired
+    children: func.isRequired,
+    data: shape({
+      menu: shape({
+        items: arrayOf(
+          shape({
+            title: string.isRequired,
+            object_id: number.isRequired,
+            object_slug: string.isRequired
+          })
+        )
+      }),
+      cases: shape({
+        edges: arrayOf(
+          shape({
+            node: shape({
+              wordpress_id: number.isRequired,
+              categories: arrayOf(number).isRequired
+            })
+          })
+        )
+      }),
+      categories: shape({
+        edges: arrayOf(
+          shape({
+            node: shape({
+              wordpress_id: number.isRequired,
+              slug: string.isRequired
+            })
+          })
+        )
+      }),
+      site: shape({
+        siteMetadata: shape({
+          title: string.isRequired,
+          description: string,
+          author: shape({
+            name: string,
+            email: string
+          })
+        })
+      })
+    }),
+    location: object.isRequired
   };
 
   createMenuItems = () => {
@@ -31,7 +74,13 @@ export default class TemplateWrapper extends Component {
   };
 
   render() {
-    const { data, children, location } = this.props;
+    const {
+      data: {
+        site: { siteMetadata }
+      },
+      children,
+      location
+    } = this.props;
     const menuItems = this.createMenuItems();
     return (
       <Auth>
@@ -39,20 +88,20 @@ export default class TemplateWrapper extends Component {
           return (
             <div>
               <Helmet
-                title={data.site.siteMetadata.title}
+                title={siteMetadata.title}
                 meta={[
                   { name: "description", content: "Sample" },
                   { name: "keywords", content: "sample, something" }
                 ]}
               />
               <Header
-                title={data.site.siteMetadata.title}
+                title={siteMetadata.title}
                 menu={menuItems}
                 location={location}
                 {...auth}
               />
               <main>{children({ ...this.props, ...auth })}</main>
-              <Footer siteMetadata={data.site.siteMetadata} />
+              <Footer siteMetadata={siteMetadata} />
             </div>
           );
         }}

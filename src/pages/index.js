@@ -1,8 +1,10 @@
 import React from "react";
+import { shape, arrayOf, object, number, string } from "prop-types";
 import Link from "gatsby-link";
 import Img from "gatsby-image";
 import { Grid, Row, Col } from "react-bootstrap";
 import styled from "styled-components";
+
 import { columnClasses } from "../utils/helpers";
 
 const Template = styled.div``;
@@ -57,26 +59,24 @@ const ButtonLink = styled(Link)`
   }
 `;
 
-const IndexPage = props => (
+const IndexPage = ({ data: { page, cases, categories, pdfs, ppt, pptx } }) => (
   <Template>
     <HeroUnit>
-      <HeroImg
-        sizes={props.data.page.featured_media.localFile.childImageSharp.sizes}
-      />
-      <HeroTitle>{props.data.page.title}</HeroTitle>
+      <HeroImg sizes={page.featured_media.localFile.childImageSharp.sizes} />
+      <HeroTitle>{page.title}</HeroTitle>
     </HeroUnit>
     <Grid>
-      {props.data.page.acf.rows.map((row, rowIndex) => (
+      {page.acf.rows.map((row, rowIndex) => (
         <Row key={rowIndex}>
           <Col xs={12}>
             <h2>{row.row_title}</h2>
           </Col>
           {row.columns.map((column, columnIndex) => {
-            const colCase = props.data.cases.edges.filter(
+            const colCase = cases.edges.filter(
               ({ node }) =>
                 node.wordpress_id === column.column_link.wordpress_id
             )[0].node;
-            const category = props.data.categories.edges.filter(
+            const category = categories.edges.filter(
               ({ node }) => node.wordpress_id === colCase.categories[0]
             )[0].node;
             return (
@@ -138,16 +138,16 @@ const IndexPage = props => (
           <div>
             <p>
               Download the HAPS 2015 Workshop Presentation as{" "}
-              <a href={props.data.pptx.publicURL} target="_blank">
+              <a href={pptx.publicURL} target="_blank">
                 a .pptx file
               </a>,{" "}
-              <a href={props.data.ppt.publicURL} target="_blank">
+              <a href={ppt.publicURL} target="_blank">
                 a .ppt file
               </a>, or{" "}
-              <a href={props.data.pdfs.edges[1].node.publicURL} target="_blank">
+              <a href={pdfs.edges[1].node.publicURL} target="_blank">
                 a .pdf file
               </a>. Also available for download is my{" "}
-              <a href={props.data.pdfs.edges[0].node.publicURL} target="_blank">
+              <a href={pdfs.edges[0].node.publicURL} target="_blank">
                 AAA 2015 poster
               </a>
             </p>
@@ -159,6 +159,47 @@ const IndexPage = props => (
 );
 
 export default IndexPage;
+
+IndexPage.propTypes = {
+  data: shape({
+    page: object.isRequired,
+    cases: shape({
+      edges: arrayOf(
+        shape({
+          node: shape({
+            wordpress_id: number.isRequired,
+            categories: arrayOf(number).isRequired
+          })
+        })
+      )
+    }),
+    categories: shape({
+      edges: arrayOf(
+        shape({
+          node: shape({
+            wordpress_id: number.isRequired,
+            slug: string.isRequired
+          })
+        })
+      )
+    }),
+    pdfs: shape({
+      edges: arrayOf(
+        shape({
+          node: shape({
+            publicURL: string.isRequired
+          })
+        })
+      )
+    }),
+    ppt: shape({
+      publicURL: string.isRequired
+    }),
+    pptx: shape({
+      publicURL: string.isRequired
+    })
+  }).isRequired
+};
 
 export const homeQuery = graphql`
   query homeQuery {
