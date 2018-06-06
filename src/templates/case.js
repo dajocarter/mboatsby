@@ -1,14 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Img from "gatsby-image";
+import { Grid } from "react-bootstrap";
+import styled from "styled-components";
+
 import CheckYourAnswer from "../components/layouts/CheckYourAnswer";
 import InputGroup from "../components/layouts/InputGroup";
 import Content from "../components/layouts/Content";
 import Image from "../components/layouts/Image";
 import Links from "../components/layouts/Links";
 import ScavengerHunt from "../components/layouts/ScavengerHunt";
-import Img from "gatsby-image";
-import { Grid } from "react-bootstrap";
-import styled from "styled-components";
 
 const Template = styled.div``;
 
