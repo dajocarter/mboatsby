@@ -12,7 +12,13 @@ const PageTemplate = ({
     content={() => (
       <div>
         <h1>{title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: content }} />
+        {content ? (
+          <div dangerouslySetInnerHTML={{ __html: content }} />
+        ) : (
+          <p>
+            Oops...looks like this page is missing content. Check back soon.
+          </p>
+        )}
       </div>
     )}
   />
